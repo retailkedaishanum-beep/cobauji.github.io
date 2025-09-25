@@ -225,6 +225,15 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Siswa untuk Monitoring</label>
+                        <div class="mb-3">
+                            <select id="filterJurusanSiswa" onchange="updateDaftarSiswa()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="">Semua Jurusan</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                                <option value="Bahasa">Bahasa</option>
+                                <option value="Agama">Agama</option>
+                            </select>
+                        </div>
                         <div id="daftarSiswa" class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-3">
                             <!-- Siswa akan dimuat di sini -->
                         </div>
@@ -234,6 +243,65 @@
                 <button onclick="tautkanGuruSiswa()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-200">
                     Tautkan Guru dengan Siswa
                 </button>
+            </div>
+
+            <!-- Tabel Data Jurusan -->
+            <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <i class="fas fa-graduation-cap text-purple-600 mr-3"></i>
+                        Data Jurusan
+                    </h3>
+                    <div class="flex gap-2">
+                        <button onclick="showTambahJurusan()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-200 text-sm">
+                            <i class="fas fa-plus mr-2"></i>Tambah Jurusan
+                        </button>
+                        <button onclick="downloadTemplateJurusan()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-sm">
+                            <i class="fas fa-download mr-2"></i>Template Excel
+                        </button>
+                        <input type="file" id="fileJurusan" accept=".xlsx,.xls" class="hidden">
+                        <button onclick="document.getElementById('fileJurusan').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-sm">
+                            <i class="fas fa-upload mr-2"></i>Upload Excel
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Kode Jurusan</th>
+                                <th class="px-4 py-2 text-left">Nama Jurusan</th>
+                                <th class="px-4 py-2 text-left">Deskripsi</th>
+                                <th class="px-4 py-2 text-left">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelJurusan" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabel Data Mapping Guru Wali - Siswa -->
+            <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-sitemap text-indigo-600 mr-3"></i>
+                    Data Mapping Guru Wali - Siswa
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Guru Wali</th>
+                                <th class="px-4 py-2 text-left">Jurusan Guru</th>
+                                <th class="px-4 py-2 text-left">Siswa yang Dibimbing</th>
+                                <th class="px-4 py-2 text-left">Jumlah Siswa</th>
+                                <th class="px-4 py-2 text-left">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelMapping" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Tabel Data -->
@@ -247,6 +315,7 @@
                                     <th class="px-4 py-2 text-left">Nama</th>
                                     <th class="px-4 py-2 text-left">Jabatan</th>
                                     <th class="px-4 py-2 text-left">Jurusan</th>
+                                    <th class="px-4 py-2 text-left">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelGuru" class="divide-y divide-gray-200">
@@ -265,6 +334,7 @@
                                     <th class="px-4 py-2 text-left">Kelas</th>
                                     <th class="px-4 py-2 text-left">Jurusan</th>
                                     <th class="px-4 py-2 text-left">Agama</th>
+                                    <th class="px-4 py-2 text-left">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelSiswa" class="divide-y divide-gray-200">
@@ -607,6 +677,30 @@
                     <i class="fas fa-save mr-2"></i>Simpan Jurnal Hari Ini
                 </button>
             </div>
+
+            <!-- Riwayat Jurnal Saya -->
+            <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-history text-green-600 mr-3"></i>
+                    Riwayat Jurnal Saya
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Tanggal</th>
+                                <th class="px-4 py-2 text-left">Bangun Pagi</th>
+                                <th class="px-4 py-2 text-left">Beribadah</th>
+                                <th class="px-4 py-2 text-left">Berolahraga</th>
+                                <th class="px-4 py-2 text-left">Status</th>
+                                <th class="px-4 py-2 text-left">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelRiwayatJurnal" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -648,13 +742,172 @@
         </div>
     </div>
 
+    <!-- Modal Edit Guru -->
+    <div id="modalEditGuru" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-overlay flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Edit Data Guru</h3>
+                <button onclick="closeEditGuru()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
+                    <input type="text" id="editNamaGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jabatan Guru</label>
+                    <input type="text" id="editJabatanGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="edit-jurusan-guru mr-2" value="IPA"> IPA
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="edit-jurusan-guru mr-2" value="IPS"> IPS
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="edit-jurusan-guru mr-2" value="Bahasa"> Bahasa
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="edit-jurusan-guru mr-2" value="Agama"> Agama
+                        </label>
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-4">
+                    <button onclick="simpanEditGuru()" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                        Simpan
+                    </button>
+                    <button onclick="closeEditGuru()" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Siswa -->
+    <div id="modalEditSiswa" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-overlay flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Edit Data Siswa</h3>
+                <button onclick="closeEditSiswa()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                    <input type="text" id="editNamaSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                    <select id="editKelasSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        <option value="X">X</option>
+                        <option value="XI">XI</option>
+                        <option value="XII">XII</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
+                    <select id="editJurusanSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        <option value="IPA">IPA</option>
+                        <option value="IPS">IPS</option>
+                        <option value="Bahasa">Bahasa</option>
+                        <option value="Agama">Agama</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Agama</label>
+                    <select id="editAgamaSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        <option value="Islam">Islam</option>
+                        <option value="Kristen">Kristen</option>
+                        <option value="Katolik">Katolik</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Buddha">Buddha</option>
+                        <option value="Konghucu">Konghucu</option>
+                    </select>
+                </div>
+                <div class="flex gap-2 pt-4">
+                    <button onclick="simpanEditSiswa()" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                        Simpan
+                    </button>
+                    <button onclick="closeEditSiswa()" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Jurnal -->
+    <div id="modalDetailJurnal" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-overlay flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Detail Jurnal Harian</h3>
+                <div class="flex gap-2">
+                    <button onclick="cetakPDF()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">
+                        <i class="fas fa-file-pdf mr-2"></i>Cetak PDF
+                    </button>
+                    <button onclick="closeDetailJurnal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="detailJurnalContent" class="space-y-4">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Jurusan -->
+    <div id="modalTambahJurusan" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-overlay flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Tambah Jurusan Baru</h3>
+                <button onclick="closeTambahJurusan()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kode Jurusan</label>
+                    <input type="text" id="kodeJurusan" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Contoh: IPA">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Jurusan</label>
+                    <input type="text" id="namaJurusan" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Contoh: Ilmu Pengetahuan Alam">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                    <textarea id="deskripsiJurusan" class="w-full px-3 py-2 border border-gray-300 rounded-lg" rows="3" placeholder="Deskripsi singkat tentang jurusan"></textarea>
+                </div>
+                <div class="flex gap-2 pt-4">
+                    <button onclick="simpanJurusan()" class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">
+                        Simpan
+                    </button>
+                    <button onclick="closeTambahJurusan()" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Data storage
         let dataGuru = [];
         let dataSiswa = [];
         let dataJurnal = [];
         let dataPenautkan = [];
+        let dataJurusan = [];
         let currentUser = null;
+        let editingGuruId = null;
+        let editingSiswaId = null;
+        let currentJurnalDetail = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -674,6 +927,14 @@
         }
 
         function loadSampleData() {
+            // Sample data jurusan
+            dataJurusan = [
+                { id: 1, kode: 'IPA', nama: 'Ilmu Pengetahuan Alam', deskripsi: 'Jurusan yang mempelajari matematika, fisika, kimia, dan biologi' },
+                { id: 2, kode: 'IPS', nama: 'Ilmu Pengetahuan Sosial', deskripsi: 'Jurusan yang mempelajari sejarah, geografi, ekonomi, dan sosiologi' },
+                { id: 3, kode: 'Bahasa', nama: 'Bahasa dan Sastra', deskripsi: 'Jurusan yang mempelajari bahasa Indonesia, bahasa Inggris, dan sastra' },
+                { id: 4, kode: 'Agama', nama: 'Pendidikan Agama', deskripsi: 'Jurusan yang mempelajari ilmu agama dan akhlak' }
+            ];
+
             // Sample data guru
             dataGuru = [
                 { id: 1, nama: 'Budi Santoso, S.Pd', jabatan: 'Guru Wali Kelas', jurusan: ['IPA', 'Bahasa'] },
@@ -723,11 +984,14 @@
                 }
             ];
 
+            updateTabelJurusan();
             updateTabelGuru();
             updateTabelSiswa();
             updateTabelMonitoring();
+            updateTabelMapping();
             updatePilihGuru();
             updateDaftarSiswa();
+            updateRiwayatJurnal();
         }
 
         // Login functionality
@@ -1082,14 +1346,20 @@
 
         function updateDaftarSiswa() {
             const container = document.getElementById('daftarSiswa');
+            const filterJurusan = document.getElementById('filterJurusanSiswa').value;
             container.innerHTML = '';
             
-            if (dataSiswa.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-sm">Belum ada data siswa</p>';
+            let filteredSiswa = dataSiswa;
+            if (filterJurusan) {
+                filteredSiswa = dataSiswa.filter(siswa => siswa.jurusan === filterJurusan);
+            }
+            
+            if (filteredSiswa.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">Tidak ada siswa sesuai filter</p>';
                 return;
             }
             
-            dataSiswa.forEach(siswa => {
+            filteredSiswa.forEach(siswa => {
                 const div = document.createElement('div');
                 div.className = 'flex items-center mb-2';
                 div.innerHTML = `
@@ -1098,6 +1368,299 @@
                 `;
                 container.appendChild(div);
             });
+        }
+
+        // Jurusan functions
+        function showTambahJurusan() {
+            document.getElementById('modalTambahJurusan').classList.remove('hidden');
+        }
+
+        function closeTambahJurusan() {
+            document.getElementById('modalTambahJurusan').classList.add('hidden');
+            document.getElementById('kodeJurusan').value = '';
+            document.getElementById('namaJurusan').value = '';
+            document.getElementById('deskripsiJurusan').value = '';
+        }
+
+        function simpanJurusan() {
+            const kode = document.getElementById('kodeJurusan').value;
+            const nama = document.getElementById('namaJurusan').value;
+            const deskripsi = document.getElementById('deskripsiJurusan').value;
+
+            if (!kode || !nama || !deskripsi) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+
+            const newId = dataJurusan.length > 0 ? Math.max(...dataJurusan.map(j => j.id)) + 1 : 1;
+            dataJurusan.push({
+                id: newId,
+                kode: kode,
+                nama: nama,
+                deskripsi: deskripsi
+            });
+
+            updateTabelJurusan();
+            closeTambahJurusan();
+            alert('Data jurusan berhasil ditambahkan!');
+        }
+
+        function downloadTemplateJurusan() {
+            const excelContent = `
+                <table>
+                    <tr>
+                        <th>Kode Jurusan</th>
+                        <th>Nama Jurusan</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    <tr>
+                        <td>IPA</td>
+                        <td>Ilmu Pengetahuan Alam</td>
+                        <td>Jurusan yang mempelajari matematika, fisika, kimia, dan biologi</td>
+                    </tr>
+                    <tr>
+                        <td>IPS</td>
+                        <td>Ilmu Pengetahuan Sosial</td>
+                        <td>Jurusan yang mempelajari sejarah, geografi, ekonomi, dan sosiologi</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            `;
+            
+            const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Template_Data_Jurusan.xls';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            alert('Template Excel untuk Data Jurusan berhasil didownload!');
+        }
+
+        function editJurusan(id) {
+            const jurusan = dataJurusan.find(j => j.id === id);
+            if (!jurusan) return;
+
+            const kode = prompt('Edit Kode Jurusan:', jurusan.kode);
+            const nama = prompt('Edit Nama Jurusan:', jurusan.nama);
+            const deskripsi = prompt('Edit Deskripsi:', jurusan.deskripsi);
+
+            if (kode && nama && deskripsi) {
+                jurusan.kode = kode;
+                jurusan.nama = nama;
+                jurusan.deskripsi = deskripsi;
+                updateTabelJurusan();
+                alert('Data jurusan berhasil diperbarui!');
+            }
+        }
+
+        function hapusJurusan(id) {
+            if (confirm('Apakah Anda yakin menghapus data jurusan ini?')) {
+                dataJurusan = dataJurusan.filter(j => j.id !== id);
+                updateTabelJurusan();
+                alert('Data jurusan berhasil dihapus!');
+            }
+        }
+
+        function updateTabelJurusan() {
+            const tbody = document.getElementById('tabelJurusan');
+            tbody.innerHTML = '';
+
+            dataJurusan.forEach(jurusan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2">${jurusan.kode}</td>
+                    <td class="px-4 py-2">${jurusan.nama}</td>
+                    <td class="px-4 py-2">${jurusan.deskripsi}</td>
+                    <td class="px-4 py-2">
+                        <div class="flex gap-2">
+                            <button onclick="editJurusan(${jurusan.id})" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="hapusJurusan(${jurusan.id})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Edit Guru functions
+        function editGuru(id) {
+            const guru = dataGuru.find(g => g.id === id);
+            if (!guru) return;
+
+            editingGuruId = id;
+            document.getElementById('editNamaGuru').value = guru.nama;
+            document.getElementById('editJabatanGuru').value = guru.jabatan;
+            
+            // Reset checkboxes
+            document.querySelectorAll('.edit-jurusan-guru').forEach(cb => cb.checked = false);
+            
+            // Set checked jurusan
+            guru.jurusan.forEach(j => {
+                const checkbox = document.querySelector(`.edit-jurusan-guru[value="${j}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+
+            document.getElementById('modalEditGuru').classList.remove('hidden');
+        }
+
+        function closeEditGuru() {
+            document.getElementById('modalEditGuru').classList.add('hidden');
+            editingGuruId = null;
+        }
+
+        function simpanEditGuru() {
+            const nama = document.getElementById('editNamaGuru').value;
+            const jabatan = document.getElementById('editJabatanGuru').value;
+            const jurusanChecked = Array.from(document.querySelectorAll('.edit-jurusan-guru:checked')).map(cb => cb.value);
+
+            if (!nama || !jabatan || jurusanChecked.length === 0) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+
+            const guru = dataGuru.find(g => g.id === editingGuruId);
+            if (guru) {
+                guru.nama = nama;
+                guru.jabatan = jabatan;
+                guru.jurusan = jurusanChecked;
+                
+                updateTabelGuru();
+                updatePilihGuru();
+                closeEditGuru();
+                alert('Data guru berhasil diperbarui!');
+            }
+        }
+
+        function hapusGuru(id) {
+            if (confirm('Apakah Anda yakin menghapus data guru ini?')) {
+                dataGuru = dataGuru.filter(g => g.id !== id);
+                updateTabelGuru();
+                updatePilihGuru();
+                alert('Data guru berhasil dihapus!');
+            }
+        }
+
+        // Edit Siswa functions
+        function editSiswa(id) {
+            const siswa = dataSiswa.find(s => s.id === id);
+            if (!siswa) return;
+
+            editingSiswaId = id;
+            document.getElementById('editNamaSiswa').value = siswa.nama;
+            document.getElementById('editKelasSiswa').value = siswa.kelas;
+            document.getElementById('editJurusanSiswa').value = siswa.jurusan;
+            document.getElementById('editAgamaSiswa').value = siswa.agama;
+
+            document.getElementById('modalEditSiswa').classList.remove('hidden');
+        }
+
+        function closeEditSiswa() {
+            document.getElementById('modalEditSiswa').classList.add('hidden');
+            editingSiswaId = null;
+        }
+
+        function simpanEditSiswa() {
+            const nama = document.getElementById('editNamaSiswa').value;
+            const kelas = document.getElementById('editKelasSiswa').value;
+            const jurusan = document.getElementById('editJurusanSiswa').value;
+            const agama = document.getElementById('editAgamaSiswa').value;
+
+            if (!nama || !kelas || !jurusan || !agama) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+
+            const siswa = dataSiswa.find(s => s.id === editingSiswaId);
+            if (siswa) {
+                siswa.nama = nama;
+                siswa.kelas = kelas;
+                siswa.jurusan = jurusan;
+                siswa.agama = agama;
+                
+                updateTabelSiswa();
+                updateDaftarSiswa();
+                closeEditSiswa();
+                alert('Data siswa berhasil diperbarui!');
+            }
+        }
+
+        function hapusSiswa(id) {
+            if (confirm('Apakah Anda yakin menghapus data siswa ini?')) {
+                dataSiswa = dataSiswa.filter(s => s.id !== id);
+                updateTabelSiswa();
+                updateDaftarSiswa();
+                alert('Data siswa berhasil dihapus!');
+            }
+        }
+
+        // Mapping functions
+        function updateTabelMapping() {
+            const tbody = document.getElementById('tabelMapping');
+            tbody.innerHTML = '';
+
+            dataPenautkan.forEach((mapping, index) => {
+                const guru = dataGuru.find(g => g.id === mapping.guruId);
+                const siswaList = mapping.siswaIds.map(id => {
+                    const siswa = dataSiswa.find(s => s.id === id);
+                    return siswa ? siswa.nama : 'Unknown';
+                }).join(', ');
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2">${guru ? guru.nama : 'Unknown'}</td>
+                    <td class="px-4 py-2">${guru ? guru.jurusan.join(', ') : '-'}</td>
+                    <td class="px-4 py-2">${siswaList}</td>
+                    <td class="px-4 py-2">${mapping.siswaIds.length} siswa</td>
+                    <td class="px-4 py-2">
+                        <div class="flex gap-2">
+                            <button onclick="editMapping(${index})" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="hapusMapping(${index})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function editMapping(index) {
+            const mapping = dataPenautkan[index];
+            if (!mapping) return;
+
+            // Set guru selection
+            document.getElementById('pilihGuru').value = mapping.guruId;
+            
+            // Set siswa selections
+            document.querySelectorAll('.siswa-pilih').forEach(cb => {
+                cb.checked = mapping.siswaIds.includes(parseInt(cb.value));
+            });
+
+            // Remove current mapping temporarily for editing
+            dataPenautkan.splice(index, 1);
+            updateTabelMapping();
+            
+            alert('Data mapping telah dimuat untuk diedit. Silakan ubah dan klik "Tautkan Guru dengan Siswa" untuk menyimpan.');
+        }
+
+        function hapusMapping(index) {
+            if (confirm('Apakah Anda yakin menghapus mapping guru-siswa ini?')) {
+                dataPenautkan.splice(index, 1);
+                updateTabelMapping();
+                alert('Mapping guru-siswa berhasil dihapus!');
+            }
         }
 
         function tautkanGuruSiswa() {
@@ -1133,6 +1696,16 @@
                     <td class="px-4 py-2">${guru.nama}</td>
                     <td class="px-4 py-2">${guru.jabatan}</td>
                     <td class="px-4 py-2">${guru.jurusan.join(', ')}</td>
+                    <td class="px-4 py-2">
+                        <div class="flex gap-2">
+                            <button onclick="editGuru(${guru.id})" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="hapusGuru(${guru.id})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(row);
             });
@@ -1149,6 +1722,16 @@
                     <td class="px-4 py-2">${siswa.kelas}</td>
                     <td class="px-4 py-2">${siswa.jurusan}</td>
                     <td class="px-4 py-2">${siswa.agama}</td>
+                    <td class="px-4 py-2">
+                        <div class="flex gap-2">
+                            <button onclick="editSiswa(${siswa.id})" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="hapusSiswa(${siswa.id})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(row);
             });
@@ -1322,6 +1905,7 @@
 
             // Add to data
             dataJurnal.push(jurnalEntry);
+            updateRiwayatJurnal();
 
             alert('🎉 Jurnal berhasil disimpan! Terima kasih telah mengisi jurnal 7 kebiasaan hari ini dengan lengkap.');
 
@@ -1338,12 +1922,330 @@
             document.getElementById('formIbadah').innerHTML = '';
         }
 
+        // Student journal history functions
+        function updateRiwayatJurnal() {
+            const tbody = document.getElementById('tabelRiwayatJurnal');
+            tbody.innerHTML = '';
+
+            // Filter jurnal for current user (demo: show all)
+            const userJurnal = dataJurnal.filter(j => j.siswaId === 999 || j.siswaId === 1 || j.siswaId === 2);
+
+            if (userJurnal.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">Belum ada riwayat jurnal</td></tr>';
+                return;
+            }
+
+            userJurnal.forEach((jurnal, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2">${jurnal.tanggal}</td>
+                    <td class="px-4 py-2">${jurnal.bangunPagi}</td>
+                    <td class="px-4 py-2">${jurnal.beribadah.substring(0, 20)}...</td>
+                    <td class="px-4 py-2">${jurnal.berolahraga.substring(0, 20)}...</td>
+                    <td class="px-4 py-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Lengkap</span>
+                    </td>
+                    <td class="px-4 py-2">
+                        <button onclick="showDetailJurnal(${index})" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">
+                            <i class="fas fa-eye mr-1"></i>Detail
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showDetailJurnal(index) {
+            const userJurnal = dataJurnal.filter(j => j.siswaId === 999 || j.siswaId === 1 || j.siswaId === 2);
+            const jurnal = userJurnal[index];
+            if (!jurnal) return;
+
+            currentJurnalDetail = jurnal;
+
+            const content = document.getElementById('detailJurnalContent');
+            content.innerHTML = `
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">Informasi Siswa</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Nama:</strong> ${jurnal.nama}</div>
+                        <div><strong>Kelas:</strong> ${jurnal.kelas}</div>
+                        <div><strong>Jurusan:</strong> ${jurnal.jurusan}</div>
+                        <div><strong>Agama:</strong> ${jurnal.agama}</div>
+                        <div><strong>Tanggal:</strong> ${jurnal.tanggal}</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-yellow-800 mb-2 flex items-center">
+                            • 1. Bangun Pagi
+                        </h4>
+                        <p class="text-sm text-yellow-700">${jurnal.bangunPagi}</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2 flex items-center">
+                            • 2. Beribadah
+                        </h4>
+                        <p class="text-sm text-green-700">${jurnal.beribadah}</p>
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-red-800 mb-2 flex items-center">
+                            • 3. Berolahraga
+                        </h4>
+                        <p class="text-sm text-red-700">${jurnal.berolahraga}</p>
+                    </div>
+
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-orange-800 mb-2 flex items-center">
+                            • 4. Makan Sehat dan Bergizi
+                        </h4>
+                        <p class="text-sm text-orange-700">${jurnal.makanSehat}</p>
+                    </div>
+
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-purple-800 mb-2 flex items-center">
+                            • 5. Gemar Belajar
+                        </h4>
+                        <p class="text-sm text-purple-700">${jurnal.gemarBelajar}</p>
+                    </div>
+
+                    <div class="bg-indigo-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-indigo-800 mb-2 flex items-center">
+                            • 6. Bermasyarakat
+                        </h4>
+                        <p class="text-sm text-indigo-700">${jurnal.bermasyarakat}</p>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg col-span-1 md:col-span-2 lg:col-span-1">
+                        <h4 class="font-semibold text-blue-800 mb-2 flex items-center">
+                            • 7. Tidur Cepat
+                        </h4>
+                        <p class="text-sm text-blue-700">${jurnal.tidurCepat}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modalDetailJurnal').classList.remove('hidden');
+        }
+
+        function closeDetailJurnal() {
+            document.getElementById('modalDetailJurnal').classList.add('hidden');
+            currentJurnalDetail = null;
+        }
+
+        function cetakPDF() {
+            if (!currentJurnalDetail) return;
+
+            const jurnal = currentJurnalDetail;
+            
+            // Create PDF content
+            const pdfContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Jurnal 7 Kebiasaan - ${jurnal.nama}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+                        .info-table { width: 100%; margin-bottom: 20px; border-collapse: collapse; }
+                        .info-table td { padding: 8px; border: 1px solid #ddd; }
+                        .habit-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        .habit-table th, .habit-table td { padding: 12px; border: 1px solid #333; text-align: left; }
+                        .habit-table th { background-color: #f5f5f5; font-weight: bold; }
+                        .signature-section { margin-top: 50px; display: flex; justify-content: space-between; }
+                        .signature-box { width: 200px; text-align: center; }
+                        .signature-line { border-top: 1px solid #333; margin-top: 60px; padding-top: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>JURNAL 7 KEBIASAAN ANAK INDONESIA HEBAT</h1>
+                        <p>Laporan Aktivitas Harian Siswa</p>
+                    </div>
+
+                    <table class="info-table">
+                        <tr>
+                            <td><strong>Nama Siswa</strong></td>
+                            <td>${jurnal.nama}</td>
+                            <td><strong>Kelas</strong></td>
+                            <td>${jurnal.kelas}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jurusan</strong></td>
+                            <td>${jurnal.jurusan}</td>
+                            <td><strong>Agama</strong></td>
+                            <td>${jurnal.agama}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tanggal</strong></td>
+                            <td>${jurnal.tanggal}</td>
+                            <td><strong>Hari</strong></td>
+                            <td>${new Date(jurnal.tanggal).toLocaleDateString('id-ID', { weekday: 'long' })}</td>
+                        </tr>
+                    </table>
+
+                    <table class="habit-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kebiasaan</th>
+                                <th>Aktivitas yang Dilakukan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>• Bangun Pagi</td>
+                                <td>Bangun pukul ${jurnal.bangunPagi}</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>• Beribadah</td>
+                                <td>${jurnal.beribadah}</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>• Berolahraga</td>
+                                <td>${jurnal.berolahraga}</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>• Makan Sehat dan Bergizi</td>
+                                <td>${jurnal.makanSehat}</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>• Gemar Belajar</td>
+                                <td>${jurnal.gemarBelajar}</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>• Bermasyarakat</td>
+                                <td>${jurnal.bermasyarakat}</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>• Tidur Cepat</td>
+                                <td>Tidur pukul ${jurnal.tidurCepat}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="signature-section">
+                        <div class="signature-box">
+                            <div class="signature-line">Orang Tua/Wali Murid</div>
+                        </div>
+                        <div class="signature-box">
+                            <div class="signature-line">Guru Wali</div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            // Create and download PDF
+            const blob = new Blob([pdfContent], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Jurnal_7_Kebiasaan_${jurnal.nama}_${jurnal.tanggal}.html`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            alert('File jurnal berhasil didownload! Buka file HTML tersebut di browser dan cetak sebagai PDF.');
+        }
+
+        // Excel upload for jurusan
+        document.getElementById('fileJurusan').addEventListener('change', function() {
+            uploadJurusan();
+        });
+
+        function uploadJurusan() {
+            const fileInput = document.getElementById('fileJurusan');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = [
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            ];
+            
+            if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xls|xlsx)$/i)) {
+                alert('Format file tidak valid! Gunakan file Excel (.xls atau .xlsx)');
+                return;
+            }
+
+            // Simulate file processing
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    // Sample data from Excel
+                    const sampleDataFromExcel = [
+                        { kode: 'TKJ', nama: 'Teknik Komputer dan Jaringan', deskripsi: 'Jurusan yang mempelajari teknologi komputer dan jaringan' },
+                        { kode: 'MM', nama: 'Multimedia', deskripsi: 'Jurusan yang mempelajari desain grafis dan multimedia' }
+                    ];
+                    
+                    // Add to existing data
+                    sampleDataFromExcel.forEach(jurusan => {
+                        const newId = dataJurusan.length > 0 ? Math.max(...dataJurusan.map(j => j.id)) + 1 : 1;
+                        dataJurusan.push({
+                            id: newId,
+                            kode: jurusan.kode,
+                            nama: jurusan.nama,
+                            deskripsi: jurusan.deskripsi
+                        });
+                    });
+                    
+                    updateTabelJurusan();
+                    
+                    alert(`✅ File Excel berhasil diupload!\n${sampleDataFromExcel.length} data jurusan baru telah ditambahkan ke sistem.`);
+                    
+                    // Reset file input
+                    fileInput.value = '';
+                    
+                } catch (error) {
+                    alert('❌ Terjadi kesalahan saat memproses file Excel. Pastikan format file sesuai dengan template yang disediakan.');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
         // Close modal when clicking outside
         document.getElementById('modalDetailMakan').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeDetailMakan();
             }
         });
+
+        document.getElementById('modalDetailJurnal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDetailJurnal();
+            }
+        });
+
+        document.getElementById('modalEditGuru').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditGuru();
+            }
+        });
+
+        document.getElementById('modalEditSiswa').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditSiswa();
+            }
+        });
+
+        document.getElementById('modalTambahJurusan').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTambahJurusan();
+            }
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848da19a25f8325',t:'MTc1ODc4NTgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98490ca0e64d9cd6',t:'MTc1ODc4Nzg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
