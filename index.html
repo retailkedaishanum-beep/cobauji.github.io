@@ -5,43 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurnal Digital 7 Kebiasaan Anak Indonesia Hebat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            box-sizing: border-box;
+        }
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         .habit-card {
             transition: all 0.3s ease;
         }
         .habit-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .modal-overlay {
+            backdrop-filter: blur(4px);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+<body class="bg-gray-50 min-h-screen">
     <!-- Login Page -->
-    <div id="loginPage" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div id="loginPage" class="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md">
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Jurnal Digital</h1>
-                <p class="text-lg text-indigo-600 font-semibold">7 Kebiasaan Anak Indonesia Hebat</p>
-                <div class="w-20 h-1 bg-indigo-500 mx-auto mt-4 rounded"></div>
+                <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-book-open text-blue-600 text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Jurnal Digital</h1>
+                <p class="text-gray-600">7 Kebiasaan Anak Indonesia Hebat</p>
             </div>
             
             <form id="loginForm" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan username">
+                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan username">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan password">
+                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan password">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                    <select id="role" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <select id="role" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">Pilih Role</option>
                         <option value="admin">Admin</option>
                         <option value="guru">Guru Wali</option>
@@ -49,125 +61,213 @@
                     </select>
                 </div>
                 
-                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold">
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
                     Masuk
                 </button>
+                
+                <div class="text-center text-sm text-gray-500 mt-4">
+                    <p>Demo Login - Password: <strong>123456</strong></p>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- Admin Dashboard -->
-    <div id="adminDashboard" class="hidden min-h-screen">
-        <nav class="bg-white shadow-lg">
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="flex justify-between items-center py-4">
-                    <h1 class="text-2xl font-bold text-gray-800">Dashboard Admin</h1>
-                    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</button>
-                </div>
-            </div>
-        </nav>
-        
-        <div class="max-w-7xl mx-auto p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Statistik</h3>
-                    <div class="space-y-2">
-                        <p class="text-sm text-gray-600">Total Guru: <span id="totalGuru" class="font-semibold">0</span></p>
-                        <p class="text-sm text-gray-600">Total Siswa: <span id="totalSiswa" class="font-semibold">0</span></p>
+    <div id="adminDashboard" class="hidden">
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-shield text-blue-600 text-xl mr-3"></i>
+                        <h1 class="text-xl font-semibold text-gray-800">Dashboard Admin</h1>
                     </div>
-                </div>
-                
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">📁 Import Data</h3>
-                    <div class="space-y-3">
-                        <button onclick="downloadTemplate('guru')" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 text-sm">
-                            Download Template Guru
-                        </button>
-                        <button onclick="downloadTemplate('siswa')" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm">
-                            Download Template Siswa
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🔗 Penugasan</h3>
-                    <button onclick="showAssignmentModal()" class="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 text-sm">
-                        Kelola Penugasan Guru-Siswa
+                    <button onclick="logout()" class="text-red-600 hover:text-red-800 flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Keluar
                     </button>
                 </div>
             </div>
-            
-            <!-- Tabs -->
-            <div class="bg-white rounded-xl card-shadow">
-                <div class="border-b border-gray-200">
-                    <nav class="flex space-x-8 px-6">
-                        <button onclick="switchTab('guru')" id="tabGuru" class="py-4 px-1 border-b-2 border-indigo-500 text-indigo-600 font-medium">
-                            Data Guru Wali
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Manajemen Guru Wali -->
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-chalkboard-teacher text-green-600 mr-3"></i>
+                        Manajemen Guru Wali
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
+                            <input type="text" id="namaGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Masukkan nama guru">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jabatan Guru</label>
+                            <input type="text" id="jabatanGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Contoh: Guru Wali Kelas">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan (dapat memilih lebih dari satu)</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="jurusan-guru mr-2" value="IPA"> IPA
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="jurusan-guru mr-2" value="IPS"> IPS
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="jurusan-guru mr-2" value="Bahasa"> Bahasa
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="jurusan-guru mr-2" value="Agama"> Agama
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button onclick="tambahGuru()" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                            Tambah Guru Wali
                         </button>
-                        <button onclick="switchTab('siswa')" id="tabSiswa" class="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
-                            Data Siswa
-                        </button>
-                    </nav>
-                </div>
-                
-                <!-- Guru Tab -->
-                <div id="guruTab" class="p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Data Guru Wali</h3>
-                        <div class="flex space-x-3">
-                            <input type="file" id="csvGuruFile" accept=".csv" class="hidden" onchange="importCSV('guru')">
-                            <button onclick="document.getElementById('csvGuruFile').click()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                                Import CSV
+                        
+                        <div class="border-t pt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Upload File Excel Guru</label>
+                            <input type="file" id="fileGuru" accept=".xlsx,.xls" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <button onclick="downloadTemplateGuru()" class="mt-2 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                                Download Template Excel
                             </button>
-                            <button onclick="showAddGuruModal()" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600">
-                                Tambah Guru
+                            <button onclick="uploadGuru()" class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                Upload Data Guru
                             </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Manajemen Siswa -->
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-user-graduate text-blue-600 mr-3"></i>
+                        Manajemen Siswa
+                    </h2>
                     
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                            <input type="text" id="namaSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama siswa">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                            <select id="kelasSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Kelas</option>
+                                <option value="X">X</option>
+                                <option value="XI">XI</option>
+                                <option value="XII">XII</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
+                            <select id="jurusanSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Jurusan</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                                <option value="Bahasa">Bahasa</option>
+                                <option value="Agama">Agama</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Agama</label>
+                            <select id="agamaSiswaAdmin" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen">Kristen</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Konghucu">Konghucu</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="tambahSiswa()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Tambah Siswa
+                        </button>
+                        
+                        <div class="border-t pt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Upload File Excel Siswa</label>
+                            <input type="file" id="fileSiswa" accept=".xlsx,.xls" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <button onclick="downloadTemplateSiswa()" class="mt-2 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                                Download Template Excel
+                            </button>
+                            <button onclick="uploadSiswa()" class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                Upload Data Siswa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Penautkan Guru dengan Siswa -->
+            <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-link text-purple-600 mr-3"></i>
+                    Penautkan Guru Wali dengan Siswa
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Guru Wali</label>
+                        <select id="pilihGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="">Pilih Guru Wali</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Siswa untuk Monitoring</label>
+                        <div id="daftarSiswa" class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-3">
+                            <!-- Siswa akan dimuat di sini -->
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="tautkanGuruSiswa()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-200">
+                    Tautkan Guru dengan Siswa
+                </button>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Guru Wali</h3>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="w-full text-sm">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurusan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-4 py-2 text-left">Nama</th>
+                                    <th class="px-4 py-2 text-left">Jabatan</th>
+                                    <th class="px-4 py-2 text-left">Jurusan</th>
                                 </tr>
                             </thead>
-                            <tbody id="guruTableBody" class="bg-white divide-y divide-gray-200">
+                            <tbody id="tabelGuru" class="divide-y divide-gray-200">
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
-                <!-- Siswa Tab -->
-                <div id="siswaTab" class="p-6 hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Data Siswa</h3>
-                        <div class="flex space-x-3">
-                            <input type="file" id="csvSiswaFile" accept=".csv" class="hidden" onchange="importCSV('siswa')">
-                            <button onclick="document.getElementById('csvSiswaFile').click()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                                Import CSV
-                            </button>
-                            <button onclick="showAddSiswaModal()" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600">
-                                Tambah Siswa
-                            </button>
-                        </div>
-                    </div>
-                    
+
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Siswa</h3>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="w-full text-sm">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurusan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guru Wali</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-4 py-2 text-left">Nama</th>
+                                    <th class="px-4 py-2 text-left">Kelas</th>
+                                    <th class="px-4 py-2 text-left">Jurusan</th>
+                                    <th class="px-4 py-2 text-left">Agama</th>
                                 </tr>
                             </thead>
-                            <tbody id="siswaTableBody" class="bg-white divide-y divide-gray-200">
+                            <tbody id="tabelSiswa" class="divide-y divide-gray-200">
                             </tbody>
                         </table>
                     </div>
@@ -177,24 +277,33 @@
     </div>
 
     <!-- Guru Dashboard -->
-    <div id="guruDashboard" class="hidden min-h-screen">
-        <nav class="bg-white shadow-lg">
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="flex justify-between items-center py-4">
-                    <h1 class="text-2xl font-bold text-gray-800">Dashboard Guru Wali</h1>
-                    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</button>
+    <div id="guruDashboard" class="hidden">
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="fas fa-chalkboard-teacher text-green-600 text-xl mr-3"></i>
+                        <h1 class="text-xl font-semibold text-gray-800">Dashboard Guru Wali</h1>
+                    </div>
+                    <button onclick="logout()" class="text-red-600 hover:text-red-800 flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                    </button>
                 </div>
             </div>
         </nav>
-        
-        <div class="max-w-7xl mx-auto p-6">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Filter Section -->
-            <div class="bg-white rounded-xl card-shadow p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔍 Filter Data Jurnal</h3>
+            <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-filter text-blue-600 mr-3"></i>
+                    Filter Data Jurnal
+                </h2>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
-                        <select id="filterKelas" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas</label>
+                        <select id="filterKelas" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                             <option value="">Semua Kelas</option>
                             <option value="X">X</option>
                             <option value="XI">XI</option>
@@ -203,78 +312,72 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Filter Jurusan</label>
                         <div class="space-y-2 max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-2">
                             <label class="flex items-center">
-                                <input type="checkbox" value="IPA" class="jurusan-filter mr-2">
-                                <span class="text-sm">IPA</span>
+                                <input type="checkbox" class="filter-jurusan mr-2" value="IPA"> IPA
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" value="IPS" class="jurusan-filter mr-2">
-                                <span class="text-sm">IPS</span>
+                                <input type="checkbox" class="filter-jurusan mr-2" value="IPS"> IPS
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" value="Bahasa" class="jurusan-filter mr-2">
-                                <span class="text-sm">Bahasa</span>
+                                <input type="checkbox" class="filter-jurusan mr-2" value="Bahasa"> Bahasa
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" value="TKJ" class="jurusan-filter mr-2">
-                                <span class="text-sm">TKJ</span>
+                                <input type="checkbox" class="filter-jurusan mr-2" value="Agama"> Agama
                             </label>
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">📅 Tanggal</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                                    <span class="text-white text-sm">📅</span>
-                                </div>
-                            </div>
-                            <input type="date" id="filterTanggal" class="w-full pl-14 pr-4 py-3 border-2 border-green-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-300 bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 font-medium text-gray-700">
-                        </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Input Jurnal</label>
+                        <input type="date" id="filterTanggal" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Agama</label>
-                        <select id="filterAgama" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <select id="filterAgama" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                             <option value="">Semua Agama</option>
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
                             <option value="Katolik">Katolik</option>
                             <option value="Hindu">Hindu</option>
                             <option value="Buddha">Buddha</option>
+                            <option value="Konghucu">Konghucu</option>
                         </select>
                     </div>
                 </div>
                 
-                <div class="mt-4">
-                    <button onclick="applyFilter()" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600">
-                        Filter Data
-                    </button>
-                    <button onclick="resetFilter()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 ml-2">
-                        Reset Filter
-                    </button>
-                </div>
+                <button onclick="filterData()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center">
+                    <i class="fas fa-search mr-2"></i>Filter Data
+                </button>
             </div>
-            
-            <!-- Data Table -->
+
+            <!-- Tabel Monitoring -->
             <div class="bg-white rounded-xl card-shadow p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Data Jurnal Siswa</h3>
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-green-600 mr-3"></i>
+                    Monitoring Jurnal 7 Kebiasaan Siswa
+                </h2>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kebiasaan Selesai</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                <th class="px-4 py-2 text-left">Nama Siswa</th>
+                                <th class="px-4 py-2 text-left">Kelas</th>
+                                <th class="px-4 py-2 text-left">Jurusan</th>
+                                <th class="px-4 py-2 text-left">Agama</th>
+                                <th class="px-4 py-2 text-left">Tanggal</th>
+                                <th class="px-4 py-2 text-left">Bangun Pagi</th>
+                                <th class="px-4 py-2 text-left">Beribadah</th>
+                                <th class="px-4 py-2 text-left">Berolahraga</th>
+                                <th class="px-4 py-2 text-left">Makan Sehat</th>
+                                <th class="px-4 py-2 text-left">Gemar Belajar</th>
+                                <th class="px-4 py-2 text-left">Bermasyarakat</th>
+                                <th class="px-4 py-2 text-left">Tidur Cepat</th>
                             </tr>
                         </thead>
-                        <tbody id="jurnalTableBody" class="bg-white divide-y divide-gray-200">
+                        <tbody id="tabelMonitoring" class="divide-y divide-gray-200">
                         </tbody>
                     </table>
                 </div>
@@ -283,546 +386,283 @@
     </div>
 
     <!-- Siswa Dashboard -->
-    <div id="siswaDashboard" class="hidden min-h-screen">
-        <nav class="bg-white shadow-lg">
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="flex justify-between items-center py-4">
-                    <h1 class="text-2xl font-bold text-gray-800">Jurnal 7 Kebiasaan</h1>
-                    <div class="flex items-center space-x-4">
-                        <span id="currentDate" class="text-gray-600"></span>
-                        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</button>
+    <div id="siswaDashboard" class="hidden">
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-graduate text-blue-600 text-xl mr-3"></i>
+                        <h1 class="text-xl font-semibold text-gray-800">Dashboard Siswa</h1>
                     </div>
+                    <button onclick="logout()" class="text-red-600 hover:text-red-800 flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                    </button>
                 </div>
             </div>
         </nav>
-        
-        <div class="max-w-6xl mx-auto p-6">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Selamat Datang, <span id="studentName">Siswa</span>!</h2>
-                <p class="text-gray-600">Isi jurnal harian 7 kebiasaan anak Indonesia hebat</p>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Jurnal 7 Kebiasaan Anak Indonesia Hebat</h2>
+                <p class="text-gray-600">Isi jurnal harianmu dengan jujur dan konsisten</p>
+                <div class="mt-4 text-lg font-semibold text-blue-600" id="tanggalHari"></div>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Bangun Pagi -->
+                <!-- Card 1: Bangun Pagi -->
                 <div class="bg-white rounded-xl card-shadow p-6 habit-card">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-2xl">🌅</span>
+                        <div class="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-sun text-yellow-600 text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800">Bangun Pagi</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">1. Bangun Pagi</h3>
                     </div>
                     <div class="space-y-3">
-                        <label class="block text-sm font-medium text-gray-700">Waktu Bangun</label>
-                        <input type="time" id="bangunPagi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500">
-                        <button onclick="saveHabit('bangunPagi')" class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">
-                            Simpan
-                        </button>
+                        <label class="block text-sm font-medium text-gray-700">Waktu Bangun Pagi</label>
+                        <input type="time" id="waktuBangun" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500">
+                        <p class="text-xs text-gray-500">Catat waktu aktual saat bangun tidur</p>
                     </div>
                 </div>
 
-                <!-- Beribadah -->
+                <!-- Card 2: Beribadah -->
                 <div class="bg-white rounded-xl card-shadow p-6 habit-card">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-2xl">🤲</span>
+                        <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-pray text-green-600 text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800">Beribadah</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">2. Beribadah</h3>
                     </div>
                     <div class="space-y-3">
                         <label class="block text-sm font-medium text-gray-700">Agama</label>
-                        <select id="agamaSelect" onchange="updateIbadahOptions()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                        <select id="agamaSiswa" onchange="updateIbadahForm()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                             <option value="">Pilih Agama</option>
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
                             <option value="Katolik">Katolik</option>
                             <option value="Hindu">Hindu</option>
                             <option value="Buddha">Buddha</option>
+                            <option value="Konghucu">Konghucu</option>
                         </select>
-                        <div id="ibadahOptions" class="space-y-2 max-h-40 overflow-y-auto">
-                        </div>
-                        <button onclick="saveHabit('beribadah')" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">
-                            Simpan
-                        </button>
+                        <div id="formIbadah" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <!-- Berolahraga -->
+                <!-- Card 3: Berolahraga -->
                 <div class="bg-white rounded-xl card-shadow p-6 habit-card">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-2xl">🏃</span>
+                        <div class="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-running text-red-600 text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800">Berolahraga</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">3. Berolahraga</h3>
                     </div>
                     <div class="space-y-3">
-                        <label class="block text-sm font-medium text-gray-700">Jenis Olahraga</label>
-                        <input type="text" id="jenisOlahraga" placeholder="Contoh: Lari, Push up, Sepak Bola" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
-                        <label class="block text-sm font-medium text-gray-700">Durasi (menit)</label>
-                        <input type="number" id="durasiOlahraga" placeholder="30" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
-                        <button onclick="saveHabit('berolahraga')" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
-                            Simpan
-                        </button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Jenis Olahraga</label>
+                            <input type="text" id="jenisOlahraga" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="Contoh: Lari, Push up, Sepak Bola, dll">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Durasi (menit)</label>
+                            <input type="number" id="durasiOlahraga" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="30" min="1">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Makan Sehat -->
-                <div class="bg-white rounded-xl card-shadow p-6 habit-card">
+                <!-- Card 4: Makan Sehat dan Bergizi -->
+                <div class="bg-white rounded-xl card-shadow p-6 habit-card col-span-1 md:col-span-2 lg:col-span-3">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
-                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                                <span class="text-2xl">🥗</span>
+                            <div class="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-apple-alt text-orange-600 text-xl"></i>
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Makan Sehat</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">4. Makan Sehat dan Bergizi</h3>
                         </div>
-                        <button onclick="showMakanDetail()" class="text-orange-500 hover:text-orange-600 text-sm font-medium">
+                        <button onclick="showDetailMakan('panduan')" class="bg-orange-100 text-orange-600 px-3 py-1 rounded-lg text-sm hover:bg-orange-200 transition duration-200">
                             Detail
                         </button>
                     </div>
-                    <div class="space-y-3">
-                        <div class="space-y-2">
-                            <p class="text-sm font-medium text-gray-700">🌅 Sarapan (06:00-09:00)</p>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center"><input type="checkbox" class="makan-sarapan mr-1" value="karbohidrat"> Karbohidrat</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-sarapan mr-1" value="protein"> Protein</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-sarapan mr-1" value="sayuran"> Sayuran</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-sarapan mr-1" value="buah"> Buah</label>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Sarapan -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+                                🌅 Sarapan (06:00 - 09:00)
+                            </h4>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="sarapan-check mr-2" value="karbohidrat"> Karbohidrat
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="sarapan-check mr-2" value="protein"> Protein
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="sarapan-check mr-2" value="sayuran"> Sayuran
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="sarapan-check mr-2" value="buah"> Buah
+                                </label>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <p class="text-sm font-medium text-gray-700">☀️ Makan Siang (12:00-14:00)</p>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center"><input type="checkbox" class="makan-siang mr-1" value="karbohidrat"> Karbohidrat</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-siang mr-1" value="protein"> Protein</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-siang mr-1" value="sayuran"> Sayuran</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-siang mr-1" value="buah"> Buah</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-siang mr-1" value="minuman"> Minuman Sehat</label>
+
+                        <!-- Makan Siang -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+                                ☀️ Makan Siang (12:00 - 14:00)
+                            </h4>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="siang-check mr-2" value="karbohidrat"> Karbohidrat
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="siang-check mr-2" value="protein"> Protein
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="siang-check mr-2" value="sayuran"> Sayuran
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="siang-check mr-2" value="buah"> Buah
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="siang-check mr-2" value="minuman"> Minuman Sehat
+                                </label>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <p class="text-sm font-medium text-gray-700">🌙 Makan Malam (18:00-20:00)</p>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center"><input type="checkbox" class="makan-malam mr-1" value="karbohidrat"> Karbohidrat</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-malam mr-1" value="protein"> Protein</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-malam mr-1" value="sayuran"> Sayuran</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-malam mr-1" value="buah"> Buah</label>
-                                <label class="flex items-center"><input type="checkbox" class="makan-malam mr-1" value="minuman"> Minuman Sehat</label>
+
+                        <!-- Makan Malam -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+                                🌙 Makan Malam (18:00 - 20:00)
+                            </h4>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="malam-check mr-2" value="karbohidrat"> Karbohidrat
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="malam-check mr-2" value="protein"> Protein
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="malam-check mr-2" value="sayuran"> Sayuran
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="malam-check mr-2" value="buah"> Buah
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="malam-check mr-2" value="minuman"> Minuman Sehat
+                                </label>
                             </div>
                         </div>
-                        <button onclick="saveHabit('makanSehat')" class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
-                            Simpan
-                        </button>
                     </div>
                 </div>
 
-                <!-- Gemar Belajar -->
-                <div class="bg-white rounded-xl card-shadow p-6 habit-card">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                                <span class="text-2xl">📚</span>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Gemar Belajar</h3>
-                        </div>
-                        <button onclick="showBelajarDetail()" class="text-blue-500 hover:text-blue-600 text-sm font-medium">
-                            📋 Detail
-                        </button>
-                    </div>
-                    <div class="space-y-3">
-                        <div id="belajarSummary" class="bg-blue-50 p-3 rounded-lg text-sm">
-                            <p class="text-blue-800 font-medium">📊 Ringkasan Hari Ini:</p>
-                            <p class="text-blue-700">Aktivitas: <span id="totalAktivitas">0</span> kegiatan</p>
-                            <p class="text-blue-700">Total Durasi: <span id="totalDurasi">0</span> menit</p>
-                        </div>
-                        <div id="belajarHistory" class="max-h-32 overflow-y-auto space-y-2">
-                            <!-- History will be populated here -->
-                        </div>
-                        <button onclick="saveHabit('gemarBelajar')" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                            Simpan
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Bermasyarakat -->
-                <div class="bg-white rounded-xl card-shadow p-6 habit-card">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-                                <span class="text-2xl">🤝</span>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Bermasyarakat</h3>
-                        </div>
-                        <button onclick="showBermasyarakatDetail()" class="text-purple-500 hover:text-purple-600 text-sm font-medium">
-                            📋 Detail
-                        </button>
-                    </div>
-                    <div class="space-y-3">
-                        <div id="bermasyarakatSummary" class="bg-purple-50 p-3 rounded-lg text-sm">
-                            <p class="text-purple-800 font-medium">📊 Ringkasan Hari Ini:</p>
-                            <p class="text-purple-700">Kegiatan: <span id="totalKegiatanMasyarakat">0</span> aktivitas</p>
-                            <p class="text-purple-700">Total Durasi: <span id="totalDurasiMasyarakat">0</span> menit</p>
-                        </div>
-                        <div id="bermasyarakatHistory" class="max-h-32 overflow-y-auto space-y-2">
-                            <!-- History will be populated here -->
-                        </div>
-                        <button onclick="saveHabit('bermasyarakat')" class="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">
-                            Simpan
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tidur Cepat -->
+                <!-- Card 5: Gemar Belajar -->
                 <div class="bg-white rounded-xl card-shadow p-6 habit-card">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-2xl">😴</span>
+                        <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-book text-purple-600 text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800">Tidur Cepat</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">5. Gemar Belajar</h3>
                     </div>
                     <div class="space-y-3">
-                        <label class="block text-sm font-medium text-gray-700">Waktu Tidur</label>
-                        <input type="time" id="tidurCepat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                        <button onclick="saveHabit('tidurCepat')" class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">
-                            Simpan
-                        </button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Kegiatan Belajar di Luar Sekolah</label>
+                            <textarea id="kegiatanBelajar" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" rows="4" placeholder="Contoh: Belajar Kelompok Membahas PR Matematika, Membaca buku sejarah, Mengerjakan soal fisika, dll"></textarea>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Card 6: Bermasyarakat -->
+                <div class="bg-white rounded-xl card-shadow p-6 habit-card">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-users text-indigo-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">6. Bermasyarakat</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Kegiatan Bermasyarakat</label>
+                            <textarea id="kegiatanMasyarakat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" rows="4" placeholder="Contoh: Mengikuti Kegiatan Siskamling, Gotong Royong Membersihkan Selokan, Membantu tetangga, dll"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7: Tidur Cepat -->
+                <div class="bg-white rounded-xl card-shadow p-6 habit-card">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-moon text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">7. Tidur Cepat</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="block text-sm font-medium text-gray-700">Waktu Tidur Malam</label>
+                        <input type="time" id="waktuTidur" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <p class="text-xs text-gray-500">Catat waktu aktual saat mulai tidur</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-8 text-center">
+                <button onclick="simpanJurnal()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition duration-200 font-medium text-lg">
+                    <i class="fas fa-save mr-2"></i>Simpan Jurnal Hari Ini
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Modals -->
-    <!-- Add Guru Modal -->
-    <div id="addGuruModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold mb-4">Tambah Guru Wali</h3>
-            <form id="addGuruForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
-                    <input type="text" id="namaGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Jabatan</label>
-                    <input type="text" id="jabatanGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
-                    <input type="text" id="jurusanGuru" placeholder="Pisahkan dengan koma jika lebih dari satu" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                </div>
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">Simpan</button>
-                    <button type="button" onclick="closeModal('addGuruModal')" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600">Batal</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Siswa Modal -->
-    <div id="addSiswaModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold mb-4">Tambah Siswa</h3>
-            <form id="addSiswaForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
-                    <input type="text" id="namaSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
-                    <select id="kelasSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                        <option value="">Pilih Kelas</option>
-                        <option value="X">X</option>
-                        <option value="XI">XI</option>
-                        <option value="XII">XII</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan</label>
-                    <select id="jurusanSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                        <option value="">Pilih Jurusan</option>
-                        <option value="IPA">IPA</option>
-                        <option value="IPS">IPS</option>
-                        <option value="Bahasa">Bahasa</option>
-                        <option value="TKJ">TKJ</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Agama</label>
-                    <select id="agamaSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
-                        <option value="">Pilih Agama</option>
-                        <option value="Islam">Islam</option>
-                        <option value="Kristen">Kristen</option>
-                        <option value="Katolik">Katolik</option>
-                        <option value="Hindu">Hindu</option>
-                        <option value="Buddha">Buddha</option>
-                    </select>
-                </div>
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">Simpan</button>
-                    <button type="button" onclick="closeModal('addSiswaModal')" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600">Batal</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Assignment Modal -->
-    <div id="assignmentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-96 overflow-y-auto">
-            <h3 class="text-lg font-semibold mb-4">Kelola Penugasan Guru-Siswa</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Guru Wali</label>
-                    <select id="assignGuru" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                        <option value="">Pilih Guru</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Siswa</label>
-                    <div id="assignSiswaList" class="max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-3 space-y-2">
+    <!-- Modal Detail Makan -->
+    <div id="modalDetailMakan" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-overlay flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-lg font-semibold text-gray-800">Panduan Makan Sehat dan Bergizi</h3>
+                <button onclick="closeDetailMakan()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-yellow-800 mb-2">🌅 Pagi hari (06:00 - 09:00)</h4>
+                        <p class="text-sm text-yellow-700">Saya Makan Nasi, Lauk Ikan Gurame Bakar, Sayur Sop, Buah Naga, dan Minum Susu</p>
                     </div>
-                </div>
-                <div class="flex space-x-3">
-                    <button onclick="saveAssignment()" class="flex-1 bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">Simpan Penugasan</button>
-                    <button onclick="closeModal('assignmentModal')" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600">Batal</button>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-orange-800 mb-2">☀️ Siang hari (12:00 - 14:00)</h4>
+                        <p class="text-sm text-orange-700">Saya Makan Nasi, Lauk Ikan Gurame Bakar, Sayur Sop, Buah Naga, dan Minum Susu</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">🌙 Malam Hari (18:00 - 20:00)</h4>
+                        <p class="text-sm text-blue-700">Saya Makan Buah Pisang</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Makan Detail Modal -->
-    <div id="makanDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-96 overflow-y-auto">
-            <h3 class="text-lg font-semibold mb-4">🥗 Panduan Makan Sehat & Bergizi</h3>
-            <div class="space-y-4">
-                <div class="bg-yellow-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-yellow-800 mb-2">🌅 Sarapan (06:00 - 09:00)</h4>
-                    <p class="text-sm text-yellow-700">Contoh: Nasi, Lauk Ikan Gurame Bakar, Sayur Sop, Buah Naga, dan Susu</p>
-                </div>
-                <div class="bg-orange-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-orange-800 mb-2">☀️ Makan Siang (12:00 - 14:00)</h4>
-                    <p class="text-sm text-orange-700">Contoh: Nasi, Lauk Ayam Goreng, Sayur Bayam, Buah Jeruk, dan Air Putih</p>
-                </div>
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-blue-800 mb-2">🌙 Makan Malam (18:00 - 20:00)</h4>
-                    <p class="text-sm text-blue-700">Contoh: Buah Pisang, Roti Gandum, dan Susu Hangat</p>
-                </div>
-                <div class="bg-green-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-green-800 mb-2">💡 Tips Makan Sehat</h4>
-                    <ul class="text-sm text-green-700 space-y-1">
-                        <li>• Makan dengan porsi seimbang</li>
-                        <li>• Perbanyak sayur dan buah</li>
-                        <li>• Minum air putih minimal 8 gelas sehari</li>
-                        <li>• Hindari makanan berlemak berlebihan</li>
-                    </ul>
-                </div>
+            <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                <h4 class="font-medium text-green-800 mb-2">🥗 Tips Makan Sehat:</h4>
+                <ul class="text-sm text-green-700 space-y-1">
+                    <li>• Makan dengan porsi seimbang sesuai kebutuhan</li>
+                    <li>• Perbanyak konsumsi sayur dan buah segar</li>
+                    <li>• Minum air putih minimal 8 gelas per hari</li>
+                    <li>• Hindari makanan berlemak berlebih dan junk food</li>
+                    <li>• Makan tepat waktu dan jangan melewatkan sarapan</li>
+                </ul>
             </div>
-            <button onclick="closeModal('makanDetailModal')" class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 mt-4">
-                Tutup
-            </button>
-        </div>
-    </div>
-
-    <!-- Belajar Detail Modal -->
-    <div id="belajarDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold mb-6 text-center">📚 Detail Kegiatan Belajar</h3>
-            
-            <form id="belajarForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Jenis Kegiatan -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">✅ Jenis Kegiatan</label>
-                        <select id="jenisKegiatan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Pilih Jenis Kegiatan</option>
-                            <option value="Mengerjakan PR">📝 Mengerjakan PR</option>
-                            <option value="Membaca Buku">📖 Membaca Buku</option>
-                            <option value="Latihan Soal">🧮 Latihan Soal</option>
-                            <option value="Video Pembelajaran">🎥 Video Pembelajaran</option>
-                            <option value="Membuat Catatan">📋 Membuat Catatan</option>
-                            <option value="Belajar Kelompok">👥 Belajar Kelompok</option>
-                            <option value="Diskusi">💬 Diskusi</option>
-                            <option value="Presentasi">🎤 Presentasi</option>
-                            <option value="Proyek">🔬 Proyek</option>
-                            <option value="Les Privat">👨‍🏫 Les Privat</option>
-                        </select>
-                    </div>
-
-                    <!-- Mata Pelajaran -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">📖 Mata Pelajaran</label>
-                        <select id="mataPelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Pilih Mata Pelajaran</option>
-                            <option value="Matematika">🔢 Matematika</option>
-                            <option value="Bahasa Indonesia">🇮🇩 Bahasa Indonesia</option>
-                            <option value="Bahasa Inggris">🇺🇸 Bahasa Inggris</option>
-                            <option value="Fisika">⚛️ Fisika</option>
-                            <option value="Kimia">🧪 Kimia</option>
-                            <option value="Biologi">🧬 Biologi</option>
-                            <option value="Sejarah">📜 Sejarah</option>
-                            <option value="Geografi">🌍 Geografi</option>
-                            <option value="Ekonomi">💰 Ekonomi</option>
-                            <option value="Sosiologi">👥 Sosiologi</option>
-                            <option value="PKN">🏛️ PKN</option>
-                            <option value="Agama">🤲 Agama</option>
-                            <option value="Seni Budaya">🎨 Seni Budaya</option>
-                            <option value="Produktif">⚙️ Produktif</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Deskripsi Kegiatan -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">✏️ Deskripsi Kegiatan</label>
-                    <textarea id="deskripsiKegiatan" placeholder="Contoh: Belajar Kelompok Membahas PR Matematika tentang Integral dengan teman sekelas" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 h-20 resize-none" required></textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Durasi -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">⏱️ Durasi (menit)</label>
-                        <input type="number" id="durasiBelajar" placeholder="90" min="1" max="480" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-
-                    <!-- Waktu -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">🕐 Waktu Belajar</label>
-                        <select id="waktuBelajar" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Pilih Waktu</option>
-                            <option value="Pagi">🌅 Pagi (06:00-12:00)</option>
-                            <option value="Siang">☀️ Siang (12:00-15:00)</option>
-                            <option value="Sore">🌇 Sore (15:00-18:00)</option>
-                            <option value="Malam">🌙 Malam (18:00-22:00)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Tips Belajar -->
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-blue-800 mb-3">💡 Tips Belajar Efektif</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-blue-700">
-                        <div>• 🎯 Tentukan tujuan belajar yang jelas</div>
-                        <div>• 📱 Hindari gangguan gadget</div>
-                        <div>• ⏰ Buat jadwal belajar rutin</div>
-                        <div>• 🤝 Diskusi dengan teman</div>
-                        <div>• 📝 Buat catatan penting</div>
-                        <div>• 💪 Istirahat setiap 45 menit</div>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 font-medium">
-                        ✅ Tambah Kegiatan
-                    </button>
-                    <button type="button" onclick="closeModal('belajarDetailModal')" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 font-medium">
-                        ❌ Batal
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Bermasyarakat Detail Modal -->
-    <div id="bermasyarakatDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold mb-6 text-center">🤝 Detail Kegiatan Bermasyarakat</h3>
-            
-            <form id="bermasyarakatForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Jenis Kegiatan -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">✅ Jenis Kegiatan</label>
-                        <select id="jenisKegiatanMasyarakat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
-                            <option value="">Pilih Jenis Kegiatan</option>
-                            <option value="Siskamling/Ronda">🛡️ Siskamling/Ronda</option>
-                            <option value="Gotong Royong">🤝 Gotong Royong</option>
-                            <option value="Kerja Bakti">🧹 Kerja Bakti</option>
-                            <option value="Membantu Tetangga">🏠 Membantu Tetangga</option>
-                            <option value="Takziah">🤲 Takziah</option>
-                            <option value="Arisan RT/RW">💰 Arisan RT/RW</option>
-                            <option value="Pengajian">📿 Pengajian</option>
-                            <option value="Karang Taruna">👥 Karang Taruna</option>
-                            <option value="Posyandu">🏥 Posyandu</option>
-                            <option value="Bakti Sosial">❤️ Bakti Sosial</option>
-                            <option value="Rapat RT/RW">📋 Rapat RT/RW</option>
-                            <option value="Perayaan 17 Agustus">🇮🇩 Perayaan 17 Agustus</option>
-                            <option value="Donor Darah">🩸 Donor Darah</option>
-                            <option value="Bersih-bersih Masjid">🕌 Bersih-bersih Masjid</option>
-                            <option value="Kegiatan Pemuda">⚽ Kegiatan Pemuda</option>
-                            <option value="Lainnya">📝 Lainnya</option>
-                        </select>
-                    </div>
-
-                    <!-- Lokasi Kegiatan -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">📍 Lokasi Kegiatan</label>
-                        <input type="text" id="lokasiKegiatan" placeholder="Contoh: RT 05/RW 02, Masjid Al-Ikhlas, Balai Desa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
-                    </div>
-                </div>
-
-                <!-- Detail Kegiatan -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">📝 Detail Kegiatan</label>
-                    <textarea id="detailKegiatanMasyarakat" placeholder="Contoh: Gotong Royong Membersihkan Selokan di Jalan Mawar bersama warga RT 05" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 h-20 resize-none" required></textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Durasi -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">⏱️ Durasi (menit)</label>
-                        <input type="number" id="durasiMasyarakat" placeholder="120" min="1" max="480" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
-                    </div>
-
-                    <!-- Waktu -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">🕐 Waktu Kegiatan</label>
-                        <select id="waktuMasyarakat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
-                            <option value="">Pilih Waktu</option>
-                            <option value="Pagi">🌅 Pagi (06:00-12:00)</option>
-                            <option value="Siang">☀️ Siang (12:00-15:00)</option>
-                            <option value="Sore">🌇 Sore (15:00-18:00)</option>
-                            <option value="Malam">🌙 Malam (18:00-22:00)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Tips Bermasyarakat -->
-                <div class="bg-purple-50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-purple-800 mb-3">💡 Tips Menjadi Warga yang Baik</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-purple-700">
-                        <div>• 🤝 Aktif dalam kegiatan RT/RW</div>
-                        <div>• 🏠 Peduli dengan tetangga sekitar</div>
-                        <div>• 🧹 Menjaga kebersihan lingkungan</div>
-                        <div>• 👥 Ikut serta dalam gotong royong</div>
-                        <div>• 🛡️ Berpartisipasi dalam keamanan</div>
-                        <div>• ❤️ Membantu yang membutuhkan</div>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 font-medium">
-                        ✅ Tambah Kegiatan
-                    </button>
-                    <button type="button" onclick="closeModal('bermasyarakatDetailModal')" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 font-medium">
-                        ❌ Batal
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 
     <script>
-        // Data Storage
-        let currentUser = null;
+        // Data storage
         let dataGuru = [];
         let dataSiswa = [];
         let dataJurnal = [];
-        let assignments = {};
+        let dataPenautkan = [];
+        let currentUser = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            updateCurrentDate();
+            updateTanggalHari();
             loadSampleData();
         });
 
-        function updateCurrentDate() {
+        function updateTanggalHari() {
             const today = new Date();
             const options = { 
                 weekday: 'long', 
@@ -830,43 +670,85 @@
                 month: 'long', 
                 day: 'numeric' 
             };
-            document.getElementById('currentDate').textContent = today.toLocaleDateString('id-ID', options);
+            document.getElementById('tanggalHari').textContent = today.toLocaleDateString('id-ID', options);
         }
 
         function loadSampleData() {
             // Sample data guru
             dataGuru = [
-                { id: 1, nama: 'Budi Santoso', jabatan: 'Guru Matematika', jurusan: 'IPA, IPS' },
-                { id: 2, nama: 'Siti Nurhaliza', jabatan: 'Guru Bahasa Indonesia', jurusan: 'Bahasa' },
-                { id: 3, nama: 'Ahmad Fauzi', jabatan: 'Guru TKJ', jurusan: 'TKJ' }
+                { id: 1, nama: 'Budi Santoso, S.Pd', jabatan: 'Guru Wali Kelas', jurusan: ['IPA', 'Bahasa'] },
+                { id: 2, nama: 'Siti Nurhaliza, S.Pd', jabatan: 'Guru Wali Kelas', jurusan: ['IPS'] },
+                { id: 3, nama: 'Ahmad Fauzi, S.Ag', jabatan: 'Guru Wali Kelas', jurusan: ['Agama'] }
             ];
 
             // Sample data siswa
             dataSiswa = [
-                { id: 1, nama: 'Andi Pratama', kelas: 'X', jurusan: 'IPA', agama: 'Islam', guruWali: null },
-                { id: 2, nama: 'Sari Dewi', kelas: 'XI', jurusan: 'IPS', agama: 'Kristen', guruWali: null },
-                { id: 3, nama: 'Riko Saputra', kelas: 'XII', jurusan: 'TKJ', agama: 'Islam', guruWali: null }
+                { id: 1, nama: 'Andi Pratama', kelas: 'XI', jurusan: 'IPA', agama: 'Islam' },
+                { id: 2, nama: 'Sari Dewi', kelas: 'XI', jurusan: 'IPS', agama: 'Kristen' },
+                { id: 3, nama: 'Budi Setiawan', kelas: 'XII', jurusan: 'Bahasa', agama: 'Islam' },
+                { id: 4, nama: 'Maya Sari', kelas: 'X', jurusan: 'IPA', agama: 'Hindu' }
             ];
 
-            updateStatistics();
+            // Sample data jurnal
+            dataJurnal = [
+                {
+                    siswaId: 1,
+                    nama: 'Andi Pratama',
+                    kelas: 'XI',
+                    jurusan: 'IPA',
+                    agama: 'Islam',
+                    tanggal: '2024-01-15',
+                    bangunPagi: '05:30',
+                    beribadah: 'Sholat 5 waktu + Dhuha',
+                    berolahraga: 'Lari 30 menit',
+                    makanSehat: 'Sarapan: 4/4, Siang: 5/5, Malam: 3/5',
+                    gemarBelajar: 'Belajar Matematika dan mengerjakan PR Fisika',
+                    bermasyarakat: 'Membantu tetangga membersihkan halaman',
+                    tidurCepat: '21:00'
+                },
+                {
+                    siswaId: 2,
+                    nama: 'Sari Dewi',
+                    kelas: 'XI',
+                    jurusan: 'IPS',
+                    agama: 'Kristen',
+                    tanggal: '2024-01-15',
+                    bangunPagi: '06:00',
+                    beribadah: 'Doa pagi dan membaca Alkitab',
+                    berolahraga: 'Senam aerobik 45 menit',
+                    makanSehat: 'Sarapan: 3/4, Siang: 4/5, Malam: 4/5',
+                    gemarBelajar: 'Belajar kelompok membahas sejarah Indonesia',
+                    bermasyarakat: 'Mengikuti kegiatan karang taruna',
+                    tidurCepat: '22:00'
+                }
+            ];
+
+            updateTabelGuru();
+            updateTabelSiswa();
+            updateTabelMonitoring();
+            updatePilihGuru();
+            updateDaftarSiswa();
         }
 
-        // Login System
+        // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const role = document.getElementById('role').value;
 
-            if (username && password && role) {
+            if (!username || !password || !role) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+
+            // Simple authentication (in real app, this would be server-side)
+            if (password === '123456') {
                 currentUser = { username, role };
                 showDashboard(role);
-                
-                if (role === 'siswa') {
-                    document.getElementById('studentName').textContent = username;
-                }
             } else {
-                alert('Mohon lengkapi semua field!');
+                alert('Password salah! Gunakan: 123456');
             }
         });
 
@@ -875,705 +757,408 @@
             
             if (role === 'admin') {
                 document.getElementById('adminDashboard').classList.remove('hidden');
-                renderGuruTable();
-                renderSiswaTable();
             } else if (role === 'guru') {
                 document.getElementById('guruDashboard').classList.remove('hidden');
-                renderJurnalTable();
             } else if (role === 'siswa') {
                 document.getElementById('siswaDashboard').classList.remove('hidden');
-                loadTodayJournal();
             }
         }
 
         function logout() {
             currentUser = null;
-            document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('guruDashboard').classList.add('hidden');
             document.getElementById('siswaDashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
             
             // Reset form
             document.getElementById('loginForm').reset();
         }
 
-        // Admin Functions
-        function switchTab(tab) {
-            if (tab === 'guru') {
-                document.getElementById('guruTab').classList.remove('hidden');
-                document.getElementById('siswaTab').classList.add('hidden');
-                document.getElementById('tabGuru').classList.add('border-indigo-500', 'text-indigo-600');
-                document.getElementById('tabGuru').classList.remove('border-transparent', 'text-gray-500');
-                document.getElementById('tabSiswa').classList.remove('border-indigo-500', 'text-indigo-600');
-                document.getElementById('tabSiswa').classList.add('border-transparent', 'text-gray-500');
-            } else {
-                document.getElementById('siswaTab').classList.remove('hidden');
-                document.getElementById('guruTab').classList.add('hidden');
-                document.getElementById('tabSiswa').classList.add('border-indigo-500', 'text-indigo-600');
-                document.getElementById('tabSiswa').classList.remove('border-transparent', 'text-gray-500');
-                document.getElementById('tabGuru').classList.remove('border-indigo-500', 'text-indigo-600');
-                document.getElementById('tabGuru').classList.add('border-transparent', 'text-gray-500');
-            }
-        }
-
-        function updateStatistics() {
-            document.getElementById('totalGuru').textContent = dataGuru.length;
-            document.getElementById('totalSiswa').textContent = dataSiswa.length;
-        }
-
-        function showAddGuruModal() {
-            document.getElementById('addGuruModal').classList.remove('hidden');
-        }
-
-        function showAddSiswaModal() {
-            document.getElementById('addSiswaModal').classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        document.getElementById('addGuruForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Admin functions
+        function tambahGuru() {
             const nama = document.getElementById('namaGuru').value;
             const jabatan = document.getElementById('jabatanGuru').value;
-            const jurusan = document.getElementById('jurusanGuru').value;
+            const jurusanChecked = Array.from(document.querySelectorAll('.jurusan-guru:checked')).map(cb => cb.value);
 
-            const newGuru = {
-                id: dataGuru.length + 1,
-                nama,
-                jabatan,
-                jurusan
-            };
+            if (!nama || !jabatan || jurusanChecked.length === 0) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
 
-            dataGuru.push(newGuru);
-            renderGuruTable();
-            updateStatistics();
-            closeModal('addGuruModal');
-            this.reset();
-        });
+            const newId = dataGuru.length > 0 ? Math.max(...dataGuru.map(g => g.id)) + 1 : 1;
+            dataGuru.push({
+                id: newId,
+                nama: nama,
+                jabatan: jabatan,
+                jurusan: jurusanChecked
+            });
 
-        document.getElementById('addSiswaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // Reset form
+            document.getElementById('namaGuru').value = '';
+            document.getElementById('jabatanGuru').value = '';
+            document.querySelectorAll('.jurusan-guru').forEach(cb => cb.checked = false);
+
+            updateTabelGuru();
+            updatePilihGuru();
+            alert('Data guru berhasil ditambahkan!');
+        }
+
+        function tambahSiswa() {
             const nama = document.getElementById('namaSiswa').value;
             const kelas = document.getElementById('kelasSiswa').value;
             const jurusan = document.getElementById('jurusanSiswa').value;
-            const agama = document.getElementById('agamaSiswa').value;
+            const agama = document.getElementById('agamaSiswaAdmin').value;
 
-            const newSiswa = {
-                id: dataSiswa.length + 1,
-                nama,
-                kelas,
-                jurusan,
-                agama,
-                guruWali: null
-            };
+            if (!nama || !kelas || !jurusan || !agama) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
 
-            dataSiswa.push(newSiswa);
-            renderSiswaTable();
-            updateStatistics();
-            closeModal('addSiswaModal');
-            this.reset();
-        });
-
-        function renderGuruTable() {
-            const tbody = document.getElementById('guruTableBody');
-            tbody.innerHTML = '';
-
-            dataGuru.forEach(guru => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${guru.nama}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${guru.jabatan}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${guru.jurusan}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="deleteGuru(${guru.id})" class="text-red-600 hover:text-red-900">Hapus</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
+            const newId = dataSiswa.length > 0 ? Math.max(...dataSiswa.map(s => s.id)) + 1 : 1;
+            dataSiswa.push({
+                id: newId,
+                nama: nama,
+                kelas: kelas,
+                jurusan: jurusan,
+                agama: agama
             });
+
+            // Reset form
+            document.getElementById('namaSiswa').value = '';
+            document.getElementById('kelasSiswa').value = '';
+            document.getElementById('jurusanSiswa').value = '';
+            document.getElementById('agamaSiswaAdmin').value = '';
+
+            updateTabelSiswa();
+            updateDaftarSiswa();
+            alert('Data siswa berhasil ditambahkan!');
         }
 
-        function renderSiswaTable() {
-            const tbody = document.getElementById('siswaTableBody');
-            tbody.innerHTML = '';
-
-            dataSiswa.forEach(siswa => {
-                const guruWali = siswa.guruWali ? dataGuru.find(g => g.id === siswa.guruWali)?.nama : 'Belum ditugaskan';
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${siswa.nama}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${siswa.kelas}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${siswa.jurusan}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${guruWali}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="deleteSiswa(${siswa.id})" class="text-red-600 hover:text-red-900">Hapus</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function deleteGuru(id) {
-            if (confirm('Yakin ingin menghapus data guru ini?')) {
-                dataGuru = dataGuru.filter(g => g.id !== id);
-                renderGuruTable();
-                updateStatistics();
-            }
-        }
-
-        function deleteSiswa(id) {
-            if (confirm('Yakin ingin menghapus data siswa ini?')) {
-                dataSiswa = dataSiswa.filter(s => s.id !== id);
-                renderSiswaTable();
-                updateStatistics();
-            }
-        }
-
-        function downloadTemplate(type) {
-            let csvContent = '';
-            if (type === 'guru') {
-                csvContent = 'Nama Guru,Jabatan Guru,Guru Wali Jurusan\nContoh Guru,Guru Matematika,"IPA,IPS"';
-            } else {
-                csvContent = 'Nama Siswa,Kelas,Jurusan,Agama\nContoh Siswa,X,IPA,Islam';
-            }
-
+        function downloadTemplateGuru() {
+            // Create CSV content for template
+            const csvContent = "Nama Guru,Jabatan Guru,Jurusan (pisahkan dengan ;)\n" +
+                              "Contoh: Budi Santoso S.Pd,Guru Wali Kelas,IPA;Bahasa\n" +
+                              "Contoh: Siti Nurhaliza S.Pd,Guru Wali Kelas,IPS";
+            
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `template_${type}.csv`;
+            a.download = 'template_guru.csv';
             a.click();
             window.URL.revokeObjectURL(url);
         }
 
-        function importCSV(type) {
-            const fileInput = document.getElementById(`csv${type.charAt(0).toUpperCase() + type.slice(1)}File`);
-            const file = fileInput.files[0];
+        function downloadTemplateSiswa() {
+            // Create CSV content for template
+            const csvContent = "Nama Siswa,Kelas,Jurusan,Agama\n" +
+                              "Contoh: Andi Pratama,XI,IPA,Islam\n" +
+                              "Contoh: Sari Dewi,XI,IPS,Kristen";
             
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const csv = e.target.result;
-                const lines = csv.split('\n');
-                const headers = lines[0].split(',');
-                
-                for (let i = 1; i < lines.length; i++) {
-                    if (lines[i].trim()) {
-                        const values = lines[i].split(',');
-                        
-                        if (type === 'guru') {
-                            const newGuru = {
-                                id: dataGuru.length + 1,
-                                nama: values[0]?.trim(),
-                                jabatan: values[1]?.trim(),
-                                jurusan: values[2]?.trim().replace(/"/g, '')
-                            };
-                            dataGuru.push(newGuru);
-                        } else {
-                            const newSiswa = {
-                                id: dataSiswa.length + 1,
-                                nama: values[0]?.trim(),
-                                kelas: values[1]?.trim(),
-                                jurusan: values[2]?.trim(),
-                                agama: values[3]?.trim(),
-                                guruWali: null
-                            };
-                            dataSiswa.push(newSiswa);
-                        }
-                    }
-                }
-                
-                if (type === 'guru') {
-                    renderGuruTable();
-                } else {
-                    renderSiswaTable();
-                }
-                updateStatistics();
-                alert(`Data ${type} berhasil diimport!`);
-            };
-            reader.readAsText(file);
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'template_siswa.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
 
-        function showAssignmentModal() {
-            document.getElementById('assignmentModal').classList.remove('hidden');
+        function uploadGuru() {
+            const fileInput = document.getElementById('fileGuru');
+            if (!fileInput.files[0]) {
+                alert('Pilih file Excel terlebih dahulu!');
+                return;
+            }
+            alert('Fitur upload Excel akan diimplementasi dengan library seperti SheetJS. Template telah disediakan untuk memudahkan format data.');
+        }
+
+        function uploadSiswa() {
+            const fileInput = document.getElementById('fileSiswa');
+            if (!fileInput.files[0]) {
+                alert('Pilih file Excel terlebih dahulu!');
+                return;
+            }
+            alert('Fitur upload Excel akan diimplementasi dengan library seperti SheetJS. Template telah disediakan untuk memudahkan format data.');
+        }
+
+        function updatePilihGuru() {
+            const select = document.getElementById('pilihGuru');
+            select.innerHTML = '<option value="">Pilih Guru Wali</option>';
             
-            // Populate guru dropdown
-            const guruSelect = document.getElementById('assignGuru');
-            guruSelect.innerHTML = '<option value="">Pilih Guru</option>';
             dataGuru.forEach(guru => {
-                guruSelect.innerHTML += `<option value="${guru.id}">${guru.nama} - ${guru.jurusan}</option>`;
-            });
-            
-            // Populate siswa list
-            const siswaList = document.getElementById('assignSiswaList');
-            siswaList.innerHTML = '';
-            dataSiswa.forEach(siswa => {
-                siswaList.innerHTML += `
-                    <label class="flex items-center">
-                        <input type="checkbox" value="${siswa.id}" class="assign-siswa mr-2">
-                        <span class="text-sm">${siswa.nama} - ${siswa.kelas} ${siswa.jurusan}</span>
-                    </label>
-                `;
+                const option = document.createElement('option');
+                option.value = guru.id;
+                option.textContent = `${guru.nama} (${guru.jurusan.join(', ')})`;
+                select.appendChild(option);
             });
         }
 
-        function saveAssignment() {
-            const guruId = parseInt(document.getElementById('assignGuru').value);
-            const selectedSiswa = Array.from(document.querySelectorAll('.assign-siswa:checked')).map(cb => parseInt(cb.value));
+        function updateDaftarSiswa() {
+            const container = document.getElementById('daftarSiswa');
+            container.innerHTML = '';
             
-            if (!guruId || selectedSiswa.length === 0) {
+            if (dataSiswa.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">Belum ada data siswa</p>';
+                return;
+            }
+            
+            dataSiswa.forEach(siswa => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center mb-2';
+                div.innerHTML = `
+                    <input type="checkbox" class="siswa-pilih mr-2" value="${siswa.id}">
+                    <span class="text-sm">${siswa.nama} (${siswa.kelas} ${siswa.jurusan})</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function tautkanGuruSiswa() {
+            const guruId = document.getElementById('pilihGuru').value;
+            const siswaIds = Array.from(document.querySelectorAll('.siswa-pilih:checked')).map(cb => parseInt(cb.value));
+            
+            if (!guruId || siswaIds.length === 0) {
                 alert('Pilih guru dan minimal satu siswa!');
                 return;
             }
             
-            // Update siswa data
-            selectedSiswa.forEach(siswaId => {
-                const siswa = dataSiswa.find(s => s.id === siswaId);
-                if (siswa) {
-                    siswa.guruWali = guruId;
-                }
+            // Save penautkan data
+            dataPenautkan.push({
+                guruId: parseInt(guruId),
+                siswaIds: siswaIds,
+                tanggal: new Date().toISOString().split('T')[0]
             });
             
-            renderSiswaTable();
-            closeModal('assignmentModal');
-            alert('Penugasan berhasil disimpan!');
+            // Reset selections
+            document.getElementById('pilihGuru').value = '';
+            document.querySelectorAll('.siswa-pilih').forEach(cb => cb.checked = false);
+            
+            alert('Guru wali berhasil ditautkan dengan siswa yang dipilih!');
         }
 
-        // Guru Functions
-        function applyFilter() {
-            renderJurnalTable();
-        }
-
-        function resetFilter() {
-            document.getElementById('filterKelas').value = '';
-            document.getElementById('filterTanggal').value = '';
-            document.getElementById('filterAgama').value = '';
-            document.querySelectorAll('.jurusan-filter').forEach(cb => cb.checked = false);
-            renderJurnalTable();
-        }
-
-        function renderJurnalTable() {
-            const tbody = document.getElementById('jurnalTableBody');
+        function updateTabelGuru() {
+            const tbody = document.getElementById('tabelGuru');
             tbody.innerHTML = '';
-            
-            // Sample journal data
-            const sampleJournal = [
-                { siswa: 'Andi Pratama', kelas: 'X IPA', tanggal: '2024-01-15', completed: 5, total: 7, status: 'Sebagian' },
-                { siswa: 'Sari Dewi', kelas: 'XI IPS', tanggal: '2024-01-15', completed: 7, total: 7, status: 'Lengkap' },
-                { siswa: 'Riko Saputra', kelas: 'XII TKJ', tanggal: '2024-01-15', completed: 3, total: 7, status: 'Kurang' }
-            ];
-            
-            sampleJournal.forEach(journal => {
+
+            dataGuru.forEach(guru => {
                 const row = document.createElement('tr');
-                const statusColor = journal.status === 'Lengkap' ? 'text-green-600' : 
-                                  journal.status === 'Sebagian' ? 'text-yellow-600' : 'text-red-600';
-                
                 row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${journal.siswa}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${journal.kelas}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${journal.tanggal}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${journal.completed}/${journal.total}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${statusColor}">${journal.status}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button class="text-indigo-600 hover:text-indigo-900">Detail</button>
-                    </td>
+                    <td class="px-4 py-2">${guru.nama}</td>
+                    <td class="px-4 py-2">${guru.jabatan}</td>
+                    <td class="px-4 py-2">${guru.jurusan.join(', ')}</td>
                 `;
                 tbody.appendChild(row);
             });
         }
 
-        // Siswa Functions
-        function updateIbadahOptions() {
-            const agama = document.getElementById('agamaSelect').value;
-            const container = document.getElementById('ibadahOptions');
-            container.innerHTML = '';
-            
-            if (agama === 'Islam') {
-                container.innerHTML = `
-                    <div class="space-y-2">
-                        <p class="text-sm font-medium text-gray-700">Sholat Wajib:</p>
-                        <div class="grid grid-cols-1 gap-1 text-xs">
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="subuh"> Subuh (04:30-06:00)</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="dzuhur"> Dzuhur (11:30-15:00)</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="ashar"> Ashar (15:00-18:00)</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="maghrib"> Maghrib (18:00-19:30)</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="isya"> Isya (19:30-04:00)</label>
-                        </div>
-                        <p class="text-sm font-medium text-gray-700 mt-3">Sholat Sunnah:</p>
-                        <div class="grid grid-cols-1 gap-1 text-xs">
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="rawatib"> Shalat Rawatib</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="dhuha"> Shalat Dhuha</label>
-                            <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="tahajud"> Shalat Tahajud</label>
-                        </div>
-                    </div>
+        function updateTabelSiswa() {
+            const tbody = document.getElementById('tabelSiswa');
+            tbody.innerHTML = '';
+
+            dataSiswa.forEach(siswa => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2">${siswa.nama}</td>
+                    <td class="px-4 py-2">${siswa.kelas}</td>
+                    <td class="px-4 py-2">${siswa.jurusan}</td>
+                    <td class="px-4 py-2">${siswa.agama}</td>
                 `;
-            } else if (agama === 'Kristen' || agama === 'Katolik') {
-                container.innerHTML = `
-                    <div class="space-y-2">
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="doa_pagi"> Doa Pagi</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="doa_malam"> Doa Malam</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="ibadah_minggu"> Ibadah Minggu</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="baca_alkitab"> Membaca Alkitab</label>
-                    </div>
-                `;
-            } else if (agama === 'Hindu') {
-                container.innerHTML = `
-                    <div class="space-y-2">
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="puja_pagi"> Puja Pagi</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="puja_sore"> Puja Sore</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="sembahyang"> Sembahyang</label>
-                    </div>
-                `;
-            } else if (agama === 'Buddha') {
-                container.innerHTML = `
-                    <div class="space-y-2">
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="meditasi"> Meditasi</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="sembahyang_buddha"> Sembahyang</label>
-                        <label class="flex items-center"><input type="checkbox" class="ibadah-checkbox mr-1" value="baca_dharma"> Membaca Dharma</label>
-                    </div>
-                `;
-            }
-        }
-
-        function showMakanDetail() {
-            document.getElementById('makanDetailModal').classList.remove('hidden');
-        }
-
-        function showBelajarDetail() {
-            document.getElementById('belajarDetailModal').classList.remove('hidden');
-        }
-
-        function showBermasyarakatDetail() {
-            document.getElementById('bermasyarakatDetailModal').classList.remove('hidden');
-        }
-
-        // Handle belajar form submission
-        document.getElementById('belajarForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const jenisKegiatan = document.getElementById('jenisKegiatan').value;
-            const mataPelajaran = document.getElementById('mataPelajaran').value;
-            const deskripsiKegiatan = document.getElementById('deskripsiKegiatan').value;
-            const durasiBelajar = parseInt(document.getElementById('durasiBelajar').value);
-            const waktuBelajar = document.getElementById('waktuBelajar').value;
-            
-            if (!jenisKegiatan || !mataPelajaran || !deskripsiKegiatan || !durasiBelajar || !waktuBelajar) {
-                alert('Mohon lengkapi semua field!');
-                return;
-            }
-            
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            let todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            // Initialize belajar activities if not exists
-            if (!todayJournal.gemarBelajar) {
-                todayJournal.gemarBelajar = {
-                    type: 'gemarBelajar',
-                    activities: []
-                };
-            }
-            
-            // Add new activity
-            const newActivity = {
-                id: Date.now(),
-                jenis: jenisKegiatan,
-                mataPelajaran: mataPelajaran,
-                deskripsi: deskripsiKegiatan,
-                durasi: durasiBelajar,
-                waktu: waktuBelajar,
-                timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            
-            todayJournal.gemarBelajar.activities.push(newActivity);
-            localStorage.setItem(journalKey, JSON.stringify(todayJournal));
-            
-            // Update display
-            updateBelajarSummary();
-            updateBelajarHistory();
-            
-            // Reset form and close modal
-            document.getElementById('belajarForm').reset();
-            closeModal('belajarDetailModal');
-            
-            alert('Kegiatan belajar berhasil ditambahkan!');
-        });
-
-        // Handle bermasyarakat form submission
-        document.getElementById('bermasyarakatForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const jenisKegiatan = document.getElementById('jenisKegiatanMasyarakat').value;
-            const lokasiKegiatan = document.getElementById('lokasiKegiatan').value;
-            const detailKegiatan = document.getElementById('detailKegiatanMasyarakat').value;
-            const durasiMasyarakat = parseInt(document.getElementById('durasiMasyarakat').value);
-            const waktuMasyarakat = document.getElementById('waktuMasyarakat').value;
-            
-            if (!jenisKegiatan || !lokasiKegiatan || !detailKegiatan || !durasiMasyarakat || !waktuMasyarakat) {
-                alert('Mohon lengkapi semua field!');
-                return;
-            }
-            
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            let todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            // Initialize bermasyarakat activities if not exists
-            if (!todayJournal.bermasyarakat) {
-                todayJournal.bermasyarakat = {
-                    type: 'bermasyarakat',
-                    activities: []
-                };
-            }
-            
-            // Add new activity
-            const newActivity = {
-                id: Date.now(),
-                jenis: jenisKegiatan,
-                lokasi: lokasiKegiatan,
-                detail: detailKegiatan,
-                durasi: durasiMasyarakat,
-                waktu: waktuMasyarakat,
-                timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-            
-            todayJournal.bermasyarakat.activities.push(newActivity);
-            localStorage.setItem(journalKey, JSON.stringify(todayJournal));
-            
-            // Update display
-            updateBermasyarakatSummary();
-            updateBermasyarakatHistory();
-            
-            // Reset form and close modal
-            document.getElementById('bermasyarakatForm').reset();
-            closeModal('bermasyarakatDetailModal');
-            
-            alert('Kegiatan bermasyarakat berhasil ditambahkan!');
-        });
-
-        function updateBelajarSummary() {
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            const todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            const activities = todayJournal.gemarBelajar?.activities || [];
-            const totalActivities = activities.length;
-            const totalDuration = activities.reduce((sum, activity) => sum + activity.durasi, 0);
-            
-            document.getElementById('totalAktivitas').textContent = totalActivities;
-            document.getElementById('totalDurasi').textContent = totalDuration;
-        }
-
-        function updateBelajarHistory() {
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            const todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            const activities = todayJournal.gemarBelajar?.activities || [];
-            const historyContainer = document.getElementById('belajarHistory');
-            
-            if (activities.length === 0) {
-                historyContainer.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">Belum ada kegiatan belajar hari ini</p>';
-                return;
-            }
-            
-            historyContainer.innerHTML = activities.map(activity => `
-                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-blue-400">
-                    <div class="flex justify-between items-start mb-1">
-                        <span class="font-medium text-sm text-gray-800">${activity.jenis}</span>
-                        <span class="text-xs text-gray-500">${activity.timestamp}</span>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-1">${activity.mataPelajaran} • ${activity.waktu} • ${activity.durasi} menit</p>
-                    <p class="text-xs text-gray-700">${activity.deskripsi}</p>
-                </div>
-            `).join('');
-        }
-
-        function updateBermasyarakatSummary() {
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            const todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            const activities = todayJournal.bermasyarakat?.activities || [];
-            const totalActivities = activities.length;
-            const totalDuration = activities.reduce((sum, activity) => sum + activity.durasi, 0);
-            
-            document.getElementById('totalKegiatanMasyarakat').textContent = totalActivities;
-            document.getElementById('totalDurasiMasyarakat').textContent = totalDuration;
-        }
-
-        function updateBermasyarakatHistory() {
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            const todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            const activities = todayJournal.bermasyarakat?.activities || [];
-            const historyContainer = document.getElementById('bermasyarakatHistory');
-            
-            if (activities.length === 0) {
-                historyContainer.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">Belum ada kegiatan bermasyarakat hari ini</p>';
-                return;
-            }
-            
-            historyContainer.innerHTML = activities.map(activity => `
-                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-purple-400">
-                    <div class="flex justify-between items-start mb-1">
-                        <span class="font-medium text-sm text-gray-800">${activity.jenis}</span>
-                        <span class="text-xs text-gray-500">${activity.timestamp}</span>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-1">${activity.lokasi} • ${activity.waktu} • ${activity.durasi} menit</p>
-                    <p class="text-xs text-gray-700">${activity.detail}</p>
-                </div>
-            `).join('');
-        }
-
-        function saveHabit(habitType) {
-            const today = new Date().toISOString().split('T')[0];
-            let habitData = {};
-            
-            switch(habitType) {
-                case 'bangunPagi':
-                    habitData = {
-                        type: 'bangunPagi',
-                        waktu: document.getElementById('bangunPagi').value
-                    };
-                    break;
-                    
-                case 'beribadah':
-                    const agama = document.getElementById('agamaSelect').value;
-                    const ibadahChecked = Array.from(document.querySelectorAll('.ibadah-checkbox:checked')).map(cb => cb.value);
-                    habitData = {
-                        type: 'beribadah',
-                        agama: agama,
-                        ibadah: ibadahChecked
-                    };
-                    break;
-                    
-                case 'berolahraga':
-                    habitData = {
-                        type: 'berolahraga',
-                        jenis: document.getElementById('jenisOlahraga').value,
-                        durasi: document.getElementById('durasiOlahraga').value
-                    };
-                    break;
-                    
-                case 'makanSehat':
-                    const sarapan = Array.from(document.querySelectorAll('.makan-sarapan:checked')).map(cb => cb.value);
-                    const siang = Array.from(document.querySelectorAll('.makan-siang:checked')).map(cb => cb.value);
-                    const malam = Array.from(document.querySelectorAll('.makan-malam:checked')).map(cb => cb.value);
-                    habitData = {
-                        type: 'makanSehat',
-                        sarapan: sarapan,
-                        siang: siang,
-                        malam: malam
-                    };
-                    break;
-                    
-                case 'gemarBelajar':
-                    habitData = {
-                        type: 'gemarBelajar',
-                        kegiatan: document.getElementById('kegiatanBelajar').value
-                    };
-                    break;
-                    
-                case 'bermasyarakat':
-                    habitData = {
-                        type: 'bermasyarakat',
-                        kegiatan: document.getElementById('kegiatanMasyarakat').value
-                    };
-                    break;
-                    
-                case 'tidurCepat':
-                    habitData = {
-                        type: 'tidurCepat',
-                        waktu: document.getElementById('tidurCepat').value
-                    };
-                    break;
-            }
-            
-            // Save to localStorage or send to server
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            let todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            todayJournal[habitType] = habitData;
-            localStorage.setItem(journalKey, JSON.stringify(todayJournal));
-            
-            alert(`${getHabitName(habitType)} berhasil disimpan!`);
-        }
-
-        function getHabitName(habitType) {
-            const names = {
-                'bangunPagi': 'Bangun Pagi',
-                'beribadah': 'Beribadah',
-                'berolahraga': 'Berolahraga',
-                'makanSehat': 'Makan Sehat',
-                'gemarBelajar': 'Gemar Belajar',
-                'bermasyarakat': 'Bermasyarakat',
-                'tidurCepat': 'Tidur Cepat'
-            };
-            return names[habitType] || habitType;
-        }
-
-        function loadTodayJournal() {
-            const today = new Date().toISOString().split('T')[0];
-            const journalKey = `journal_${currentUser.username}_${today}`;
-            const todayJournal = JSON.parse(localStorage.getItem(journalKey)) || {};
-            
-            // Load saved data back to form
-            Object.keys(todayJournal).forEach(habitType => {
-                const data = todayJournal[habitType];
-                
-                switch(habitType) {
-                    case 'bangunPagi':
-                        if (data.waktu) document.getElementById('bangunPagi').value = data.waktu;
-                        break;
-                    case 'beribadah':
-                        if (data.agama) {
-                            document.getElementById('agamaSelect').value = data.agama;
-                            updateIbadahOptions();
-                            setTimeout(() => {
-                                data.ibadah?.forEach(ibadah => {
-                                    const checkbox = document.querySelector(`.ibadah-checkbox[value="${ibadah}"]`);
-                                    if (checkbox) checkbox.checked = true;
-                                });
-                            }, 100);
-                        }
-                        break;
-                    case 'berolahraga':
-                        if (data.jenis) document.getElementById('jenisOlahraga').value = data.jenis;
-                        if (data.durasi) document.getElementById('durasiOlahraga').value = data.durasi;
-                        break;
-                    case 'makanSehat':
-                        data.sarapan?.forEach(item => {
-                            const checkbox = document.querySelector(`.makan-sarapan[value="${item}"]`);
-                            if (checkbox) checkbox.checked = true;
-                        });
-                        data.siang?.forEach(item => {
-                            const checkbox = document.querySelector(`.makan-siang[value="${item}"]`);
-                            if (checkbox) checkbox.checked = true;
-                        });
-                        data.malam?.forEach(item => {
-                            const checkbox = document.querySelector(`.makan-malam[value="${item}"]`);
-                            if (checkbox) checkbox.checked = true;
-                        });
-                        break;
-                    case 'gemarBelajar':
-                        // Load belajar activities and update summary
-                        updateBelajarSummary();
-                        updateBelajarHistory();
-                        break;
-                    case 'bermasyarakat':
-                        // Load bermasyarakat activities and update summary
-                        updateBermasyarakatSummary();
-                        updateBermasyarakatHistory();
-                        break;
-                    case 'tidurCepat':
-                        if (data.waktu) document.getElementById('tidurCepat').value = data.waktu;
-                        break;
-                }
+                tbody.appendChild(row);
             });
         }
+
+        // Guru functions
+        function filterData() {
+            updateTabelMonitoring();
+            alert('Data berhasil difilter sesuai kriteria yang dipilih!');
+        }
+
+        function updateTabelMonitoring() {
+            const tbody = document.getElementById('tabelMonitoring');
+            tbody.innerHTML = '';
+
+            // Get filter values
+            const filterKelas = document.getElementById('filterKelas').value;
+            const filterTanggal = document.getElementById('filterTanggal').value;
+            const filterAgama = document.getElementById('filterAgama').value;
+            const filterJurusan = Array.from(document.querySelectorAll('.filter-jurusan:checked')).map(cb => cb.value);
+
+            let filteredData = dataJurnal;
+
+            // Apply filters
+            if (filterKelas) {
+                filteredData = filteredData.filter(item => item.kelas === filterKelas);
+            }
+            if (filterTanggal) {
+                filteredData = filteredData.filter(item => item.tanggal === filterTanggal);
+            }
+            if (filterAgama) {
+                filteredData = filteredData.filter(item => item.agama === filterAgama);
+            }
+            if (filterJurusan.length > 0) {
+                filteredData = filteredData.filter(item => filterJurusan.includes(item.jurusan));
+            }
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="12" class="px-4 py-8 text-center text-gray-500">Tidak ada data jurnal yang sesuai dengan filter</td></tr>';
+                return;
+            }
+
+            filteredData.forEach(jurnal => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2">${jurnal.nama}</td>
+                    <td class="px-4 py-2">${jurnal.kelas}</td>
+                    <td class="px-4 py-2">${jurnal.jurusan}</td>
+                    <td class="px-4 py-2">${jurnal.agama}</td>
+                    <td class="px-4 py-2">${jurnal.tanggal}</td>
+                    <td class="px-4 py-2">${jurnal.bangunPagi}</td>
+                    <td class="px-4 py-2">${jurnal.beribadah}</td>
+                    <td class="px-4 py-2">${jurnal.berolahraga}</td>
+                    <td class="px-4 py-2">${jurnal.makanSehat}</td>
+                    <td class="px-4 py-2">${jurnal.gemarBelajar}</td>
+                    <td class="px-4 py-2">${jurnal.bermasyarakat}</td>
+                    <td class="px-4 py-2">${jurnal.tidurCepat}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Siswa functions
+        function updateIbadahForm() {
+            const agama = document.getElementById('agamaSiswa').value;
+            const formIbadah = document.getElementById('formIbadah');
+            
+            formIbadah.innerHTML = '';
+
+            if (agama === 'Islam') {
+                formIbadah.innerHTML = `
+                    <div class="space-y-3">
+                        <h4 class="font-medium text-gray-700">Sholat Wajib:</h4>
+                        <div class="grid grid-cols-1 gap-2 text-sm">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="subuh"> Subuh (04:30-06:00)
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="dzuhur"> Dzuhur/Jumat (11:30-15:00)
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="ashar"> Ashar (15:00-18:00)
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="maghrib"> Maghrib (18:00-19:30)
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="isya"> Isya (19:30-04:00)
+                            </label>
+                        </div>
+                        <h4 class="font-medium text-gray-700 mt-3">Sholat Sunnah:</h4>
+                        <div class="space-y-1 text-sm">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="rawatib"> Shalat Rawatib
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="dhuha"> Shalat Dhuha
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="ibadah-check mr-2" value="tahajud"> Shalat Tahajud
+                            </label>
+                        </div>
+                    </div>
+                `;
+            } else if (agama) {
+                formIbadah.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kegiatan Ibadah</label>
+                        <textarea id="ibadahLainnya" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" rows="3" placeholder="Tuliskan kegiatan ibadah yang dilakukan sesuai agama dan keyakinan"></textarea>
+                    </div>
+                `;
+            }
+        }
+
+        function showDetailMakan(waktu) {
+            const modal = document.getElementById('modalDetailMakan');
+            modal.classList.remove('hidden');
+        }
+
+        function closeDetailMakan() {
+            document.getElementById('modalDetailMakan').classList.add('hidden');
+        }
+
+        function simpanJurnal() {
+            // Collect all form data
+            const waktuBangun = document.getElementById('waktuBangun').value;
+            const agama = document.getElementById('agamaSiswa').value;
+            const jenisOlahraga = document.getElementById('jenisOlahraga').value;
+            const durasiOlahraga = document.getElementById('durasiOlahraga').value;
+            const kegiatanBelajar = document.getElementById('kegiatanBelajar').value;
+            const kegiatanMasyarakat = document.getElementById('kegiatanMasyarakat').value;
+            const waktuTidur = document.getElementById('waktuTidur').value;
+
+            // Check required fields
+            if (!waktuBangun || !agama || !jenisOlahraga || !durasiOlahraga || !kegiatanBelajar || !kegiatanMasyarakat || !waktuTidur) {
+                alert('Mohon lengkapi semua field jurnal!');
+                return;
+            }
+
+            // Collect makan data
+            const sarapanChecked = Array.from(document.querySelectorAll('.sarapan-check:checked')).map(cb => cb.value);
+            const siangChecked = Array.from(document.querySelectorAll('.siang-check:checked')).map(cb => cb.value);
+            const malamChecked = Array.from(document.querySelectorAll('.malam-check:checked')).map(cb => cb.value);
+
+            // Collect ibadah data
+            let ibadahData = '';
+            if (agama === 'Islam') {
+                const ibadahChecked = Array.from(document.querySelectorAll('.ibadah-check:checked')).map(cb => cb.value);
+                ibadahData = `${agama} - ${ibadahChecked.join(', ')}`;
+            } else {
+                const ibadahLainnya = document.getElementById('ibadahLainnya');
+                ibadahData = ibadahLainnya ? ibadahLainnya.value : agama;
+            }
+
+            // Create jurnal entry
+            const jurnalEntry = {
+                siswaId: 999, // Demo siswa ID
+                nama: 'Siswa Demo',
+                kelas: 'XI',
+                jurusan: 'IPA',
+                agama: agama,
+                tanggal: new Date().toISOString().split('T')[0],
+                bangunPagi: waktuBangun,
+                beribadah: ibadahData,
+                berolahraga: `${jenisOlahraga} (${durasiOlahraga} menit)`,
+                makanSehat: `Sarapan: ${sarapanChecked.length}/4, Siang: ${siangChecked.length}/5, Malam: ${malamChecked.length}/5`,
+                gemarBelajar: kegiatanBelajar,
+                bermasyarakat: kegiatanMasyarakat,
+                tidurCepat: waktuTidur
+            };
+
+            // Add to data
+            dataJurnal.push(jurnalEntry);
+
+            alert('🎉 Jurnal berhasil disimpan! Terima kasih telah mengisi jurnal 7 kebiasaan hari ini dengan lengkap.');
+
+            // Reset form
+            document.querySelectorAll('#siswaDashboard input, #siswaDashboard textarea, #siswaDashboard select').forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+
+            // Clear ibadah form
+            document.getElementById('formIbadah').innerHTML = '';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modalDetailMakan').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDetailMakan();
+            }
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848a77517fd9cd5',t:'MTc1ODc4MzcyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848d025754dd439',t:'MTc1ODc4NTM5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
