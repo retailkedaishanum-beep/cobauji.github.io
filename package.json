@@ -1,0 +1,13 @@
+{
+  "name": "jurnal-7-kebiasaan",
+  "version": "1.0.0",
+  "description": "Jurnal Digital 7 Kebiasaan Anak Indonesia Hebat",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "keywords": ["jurnal", "pendidikan", "siswa"],
+  "author": "Nama Anda",
+  "license": "MIT"
+}
